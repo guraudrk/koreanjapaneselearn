@@ -10,6 +10,12 @@
 
 ---
 
+## 0-1) 🔗 GitHub Repository
+이 프로젝트의 메인 저장소 주소다. 비어 있다면 사용자에게 요청한다.
+- **URL**: `https://github.com/guraudrk/koreanjapaneselearn.git`
+
+---
+
 ## 1) 이 레포의 “진실의 원천” (Single Source of Truth)
 대화는 휘발되고, 모델은 바뀐다. 그래서 아래 파일이 항상 기준이다.
 
@@ -88,9 +94,10 @@ Post-MVP: STT, 구독/결제, 이미지 변환 등 (MVP 완료 후)
 ## 5) 작업 방식(항상 동일한 루프)
 ### 5-1) 세션 시작 루틴(주니어도 그대로 따라하기)
 1) `claude.md` 읽기
-2) **File bootstrap** 수행(없으면 생성)
-3) `progress/PROGRESS.md` 읽기 (현재 테스크/다음 액션/블로커 확인)
-4) `docs/tasks/`에서 “지금 테스크 파일” 열기  
+2) **GitHub URL 확인**: `0-1)` 섹션에 주소가 비어 있다면 사용자에게 요청하고 기록한다.
+3) **File bootstrap** 수행(없으면 생성)
+4) `progress/PROGRESS.md` 읽기 (현재 테스크/다음 액션/블로커 확인)
+5) `docs/tasks/`에서 “지금 테스크 파일” 열기  
    - 없다면 `task_creation_rules.md` 기준으로 먼저 만든다.
 
 ### 5-2) 기본 실행 루프(반드시 지키기)
@@ -99,7 +106,8 @@ Post-MVP: STT, 구독/결제, 이미지 변환 등 (MVP 완료 후)
 3) **Execute**: 스텝마다 “작은 diff → 실행/테스트 → 결과 기록”
 4) **Verify**: Acceptance Criteria를 체크박스로 검증
 5) **Update**: PROGRESS/CHANGELOG/FAILURES 갱신
-6) **Done**: 산출물 정리(문서/테스크 상태 변경)
+6) **Push**: 각 테스크 완료 시(Status -> DONE) 반드시 `git push`를 수행한다.
+7) **Done**: 산출물 정리(문서/테스크 상태 변경)
 
 > 목표는 “한 방에 크게”가 아니라 “작게, 검증하며, 되돌리기 쉽게”.
 
@@ -139,6 +147,7 @@ Post-MVP: STT, 구독/결제, 이미지 변환 등 (MVP 완료 후)
 - [ ] `progress/PROGRESS.md`에 “무엇이 끝났고 다음은 무엇인지” 기록
 - [ ] 관련 문서 업데이트(API/DECISIONS 등)
 - [ ] 변경이 의사결정 수준이면 `progress/CHANGELOG.md`에 이유 기록
+- [ ] **GitHub Push**: 모든 변경사항을 원격 저장소에 푸쉬 (`git push`)
 
 ---
 

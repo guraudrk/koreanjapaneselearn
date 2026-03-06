@@ -1,0 +1,14 @@
+{
+  "name": "antigravity",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace=@antigravity/web",
+    "dev:api": "npm run start:dev --workspace=@antigravity/api",
+    "dev:mobile": "npm run ios --workspace=@antigravity/mobile"
+  }
+}
