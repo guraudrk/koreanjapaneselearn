@@ -1,0 +1,17 @@
+{
+  "name": "@antigravity/ui",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared UI components (web-focused)",
+  "main": "./src/index.ts",
+  "scripts": {
+    "build": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5"
+  },
+  "peerDependencies": {
+    "react": "^19",
+    "react-dom": "^19"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "@antigravity/ai-core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI Provider abstraction layer (Claude / Gemini / Mock)",
+  "main": "./src/index.ts",
+  "scripts": {
+    "build": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
+  }
+}

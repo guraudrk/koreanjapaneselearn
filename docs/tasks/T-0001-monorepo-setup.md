@@ -20,9 +20,20 @@
 - `apps/mobile/` 초기 Expo 프로젝트
 - `packages/` 폴더 내 구조
 
+## Status: DONE ✓
+
+## 변경 요약
+- apps/web: Next.js 16 + TypeScript + TailwindCSS 초기화
+- apps/api: NestJS 11 + TypeScript 초기화
+- apps/mobile: Expo 55 + TypeScript (blank-typescript) 초기화
+- packages/shared: 공통 타입 (LearningMode, ApiError 등) 정의
+- packages/ai-core: Provider 인터페이스 + MockAIProvider 구현
+- packages/ui: UI 컴포넌트 스텁 생성
+- npm workspaces @antigravity/* 스코프로 통합
+
 ## Acceptance Criteria
-- [ ] `npm run dev` (또는 각 앱별 실행 명령)으로 각 앱이 정상적으로 기동됨
-- [ ] 모노레포 내에서 각 앱간의 패키지 분리가 되어 있음
+- [x] `npm run dev` (또는 각 앱별 실행 명령)으로 각 앱이 정상적으로 기동됨
+- [x] 모노레포 내에서 각 앱간의 패키지 분리가 되어 있음
 
 ## Verification Plan
 - 각 디렉토리에서 초기 구동 명령 실행 및 결과 확인
