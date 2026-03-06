@@ -1,0 +1,196 @@
+# claude.md — Harness Engineering Playbook
+이 파일은 “대화”가 아니라 “레포의 파일”을 기준으로 개발이 굴러가게 만드는 작업 하네스다.
+
+---
+
+## 0) 프로젝트 한 줄 요약 (WHY)
+전 세계 사용자가 **한국어/일본어를 기초부터(또는 동시에)** 학습하고, 필요하면 **사전 검색 + AI 번역/간단 설명(일일 제한)**까지 할 수 있는 웹/앱 플랫폼을 만든다.
+
+- 핵심 차별점: KR/JP 동시 학습 + 비교 학습 카드 + (선택) AI 설명
+
+---
+
+## 1) 이 레포의 “진실의 원천” (Single Source of Truth)
+대화는 휘발되고, 모델은 바뀐다. 그래서 아래 파일이 항상 기준이다.
+
+- PRD: `docs/prd.md`
+- 구현 계획: `docs/implementation_plan.md`
+- 테스크 생성 규칙: `docs/task_creation_rules.md`
+- 테스크 실행 규칙: `docs/task_execution_rules.md`
+
+---
+
+## 2) 🔒 Harness 핵심 추가 구성 (필수급/강추)
+> 아래 구성은 **컨텍스트 흔들림 방지**를 위한 “고정 장치”다.  
+> 4개 핵심 문서( PRD/계획/규칙2종 )만으로도 돌아가긴 하지만, 아래가 있으면 **세션 재개 비용이 급감**한다.
+
+### 2-1) `progress/PROGRESS.md` (필수급)
+**역할**
+- 현재 작업 상태 / 다음 한 걸음 / 블로커를 한 파일에 고정
+- 매 세션 시작 시 여기부터 읽고 재개
+
+**없으면**
+- 세션 끊길 때마다 “어디까지 했지?”가 반복되고 재개 비용이 커진다.
+
+**형식 예시(아주 짧게)**
+- 지금 테스크: `T-0001 Auth`
+- 다음 액션: `DB 스키마 확정 → API 엔드포인트 작성`
+- 블로커: `없음` (또는 이슈 링크/로그 경로)
+
+### 2-2) `docs/tasks/` 폴더 (강추)
+**역할**
+- 테스크를 “말”이 아니라 **파일**로 관리 (T-0001, T-0002 …)
+- 우선순위/범위/검증 기준이 문서로 고정되어 흔들리지 않음
+
+**없으면**
+- 에이전트가 테스크를 매번 새로 해석해서 **우선순위/범위가 흔들릴 확률이 급증**한다.
+
+### 2-3) `progress/CHANGELOG.md` / `progress/FAILURES.md` (선택이지만 효과 큼)
+- `CHANGELOG.md` : **결정이 바뀐 이유** 기록(나중에 흔들릴 때 복구 가능)
+- `FAILURES.md` : 막힌 원인/해결 기록(같은 함정 2번 방지)
+
+---
+
+## 3) 🧰 File bootstrap (없으면 자동 생성)
+> Antigravity/Claude가 “자동으로” 만들어줄 수 있지만 환경에 따라 누락될 수 있다.  
+> 그래서 **작업 시작 시 아래 파일/폴더가 없으면 즉시 생성**하고 진행한다.
+
+### 3-1) 반드시 존재해야 하는 경로
+- `progress/PROGRESS.md`
+- `progress/CHANGELOG.md`
+- `progress/FAILURES.md`
+- `docs/`
+- `docs/tasks/`
+
+
+### 3-2) 생성 직후 1회 초기 기록(필수)
+- `progress/PROGRESS.md`에 아래 3줄을 최소로 남기고 시작한다.
+  - 지금 테스크:
+  - 다음 액션:
+  - 블로커:
+
+---
+
+## 4) MVP 범위(오늘 우리가 “반드시” 만드는 것)
+MVP 목표(우선순위 고정):
+
+1) 회원가입/로그인  
+2) 학습 모드 선택: KR / JP / BOTH  
+3) 단계별 커리큘럼 + 학습 카드/퀴즈 + 진도 저장  
+4) 백과사전 검색(영어 입력 → KR/JP 뜻 + 예문)  
+5) 포인트 적립 + 기본 공유  
+6) AI 기능 1종(텍스트): “내 언어 → KR/JP 번역 + 간단 설명” + **일일 제한**
+
+Post-MVP: STT, 구독/결제, 이미지 변환 등 (MVP 완료 후)
+
+---
+
+## 5) 작업 방식(항상 동일한 루프)
+### 5-1) 세션 시작 루틴(주니어도 그대로 따라하기)
+1) `claude.md` 읽기
+2) **File bootstrap** 수행(없으면 생성)
+3) `progress/PROGRESS.md` 읽기 (현재 테스크/다음 액션/블로커 확인)
+4) `docs/tasks/`에서 “지금 테스크 파일” 열기  
+   - 없다면 `task_creation_rules.md` 기준으로 먼저 만든다.
+
+### 5-2) 기본 실행 루프(반드시 지키기)
+1) **Understand**: 테스크 문서를 읽고 5줄로 요약
+2) **Plan**: 3~7개 마이크로 스텝으로 쪼개기 + 롤백 포인트 명시
+3) **Execute**: 스텝마다 “작은 diff → 실행/테스트 → 결과 기록”
+4) **Verify**: Acceptance Criteria를 체크박스로 검증
+5) **Update**: PROGRESS/CHANGELOG/FAILURES 갱신
+6) **Done**: 산출물 정리(문서/테스크 상태 변경)
+
+> 목표는 “한 방에 크게”가 아니라 “작게, 검증하며, 되돌리기 쉽게”.
+
+---
+
+## 6) 테스크 운영 규칙(생성/실행 표준)
+### 6-1) 테스크는 이렇게 만든다 (Creation Harness)
+- 모든 테스크는 `docs/tasks/`에 `T-XXXX-<slug>.md`로 저장
+- 테스크는 “작게, 검증 가능하게” (1개 사용자 가치 단위)
+- MVP 우선순위: Auth/Settings → Learning Loop → Dictionary → Points/Share → AI(일일 제한) → Post-MVP
+
+**테스크 템플릿(필수 필드)**
+- Goal(사용자 가치)
+- Scope(포함/제외)
+- Deliverables(코드 + 검증 방법은 필수)
+- Acceptance Criteria(검증 가능한 문장)
+- Verification Plan(자동/수동 시나리오)
+
+### 6-2) 테스크는 이렇게 실행한다 (Execution Harness)
+절대 규칙:
+- 작은 diff
+- 매 스텝 검증
+- 시크릿/개인정보 로그/커밋 금지
+- “추측”이 필요하면 먼저 실험/재현/로그 확인
+
+막히면(15분 이상):
+- 재현 최소화 → 로그 첨부 → 롤백 → 가설 3개 + 실험 1개로 전환
+- 그리고 `progress/FAILURES.md`에 남긴다
+
+---
+
+## 7) Definition of Done (DoD) — “완료”의 정의
+테스크는 아래를 모두 만족해야 DONE:
+- [ ] PRD/구현계획의 해당 요구를 충족
+- [ ] 검증(테스트 or 구체적 수동 시나리오) 수행
+- [ ] 회귀 위험이 있으면 최소한의 회귀 체크 추가
+- [ ] `progress/PROGRESS.md`에 “무엇이 끝났고 다음은 무엇인지” 기록
+- [ ] 관련 문서 업데이트(API/DECISIONS 등)
+- [ ] 변경이 의사결정 수준이면 `progress/CHANGELOG.md`에 이유 기록
+
+---
+
+## 8) AI 기능은 별도 하네스(비용/보안/일일 제한 때문에)
+AI 관련 구현은 반드시 다음 순서:
+
+1) `packages/ai-core/`에 Provider 인터페이스 정의
+2) Mock Provider 구현(테스트 가능)
+3) Gemini Provider 구현
+4) Claude Provider 구현
+5) `ai_usage`로 사용량 집계 + 일일 제한(서버 사이드)
+6) 캐싱(동일 입력 재사용)
+7) 비용/한도/실패 대응을 문서화
+
+프롬프트는 코드에 박지 말고:
+- `packages/ai-core/prompts/<feature>.txt`에 저장
+- 입력/출력 스키마를 명확히 (가능하면 JSON)
+
+---
+
+## 9) 리포 구조(권장)
+repo/
+  claude.md
+  apps/
+    web/       # Next.js
+    mobile/    # Expo
+    api/       # NestJS(or FastAPI)
+  packages/
+    shared/    # zod schema, types
+    ai-core/   # Provider abstraction
+  docs/
+    prd.md
+    implementation_plan.md
+    task_creation_rules.md
+    task_execution_rules.md
+    API.md
+    DECISIONS.md
+    tasks/
+      T-0001-...
+  progress/
+    PROGRESS.md
+    CHANGELOG.md
+    FAILURES.md
+
+---
+
+## 10) Output Contract(결과는 여기 남긴다)
+- 테스크 문서: `docs/tasks/T-XXXX-*.md`
+  - Status: TODO / DOING / DONE
+  - 변경 요약 5줄
+  - 검증 결과(명령/로그/스크린샷 링크)
+- 의사결정 변경: `docs/DECISIONS.md` 또는 `progress/CHANGELOG.md`
+- API 변경: `docs/API.md`
+- 진행/다음 액션: `progress/PROGRESS.md`
+- 막힌 기록/해결: `progress/FAILURES.md`
