@@ -8,3 +8,13 @@
 - packages/ai-core: Provider 추상화 인터페이스 + MockAIProvider 구현
 - .gitignore 정비 (node_modules, .env 등)
 - T-0000: Project initialization and bootstrapping.
+
+## 2026-03-07 — T-0003 Prisma + DB Schema DONE
+
+- infra/docker/docker-compose.yml 생성 (Postgres 16 + Redis 7)
+- apps/api에 Prisma 7.4.2 설치 (prisma-client-js 제너레이터, NestJS CJS 호환)
+- apps/api/prisma/schema.prisma: User, UserSettings 모델 정의
+- apps/api/src/prisma/prisma.service.ts + prisma.module.ts 생성
+- AppModule에 PrismaModule (@Global) 등록
+- apps/api/.env.example 생성, .env는 .gitignore 보호
+- prisma generate 성공, tsc --noEmit 에러 없음

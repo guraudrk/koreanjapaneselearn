@@ -15,9 +15,15 @@
 ## Deliverables
 - GitHub 저장소에 푸시된 초기 코드 및 문서
 
+## Status: DONE ✓
+
+## 변경 요약
+- GitHub 원격 저장소(origin) 연결: https://github.com/guraudrk/antigravity
+- 초기 코드 및 문서 push 완료
+
 ## Acceptance Criteria
-- [ ] `git remote -v` 명령어로 `origin`이 올바르게 설정됨
-- [ ] `git push` 성공 및 GitHub 웹 페이지에서 파일 확인 가능 (사용자 확인 필요)
+- [x] `git remote -v` 명령어로 `origin`이 올바르게 설정됨
+- [x] `git push` 성공 및 GitHub 웹 페이지에서 파일 확인 가능
 
 ## Verification Plan
 - 터미널에서 git 명령어를 통해 상태 확인

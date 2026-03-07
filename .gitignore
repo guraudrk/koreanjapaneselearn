@@ -30,3 +30,6 @@ Thumbs.db
 
 # Coverage
 coverage
+
+# Prisma generated
+apps/api/generated/
