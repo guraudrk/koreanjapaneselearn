@@ -10,13 +10,14 @@ datasource db {
 }
 
 model User {
-  id             String        @id @default(cuid())
-  email          String        @unique
-  passwordHash   String
-  nativeLanguage String        @default("en")
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  settings       UserSettings?
+  id                 String        @id @default(cuid())
+  email              String        @unique
+  passwordHash       String
+  nativeLanguage     String        @default("en")
+  refreshTokenHash   String?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  settings           UserSettings?
 
   @@map("users")
 }
