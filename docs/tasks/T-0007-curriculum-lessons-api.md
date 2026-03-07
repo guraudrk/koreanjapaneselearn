@@ -49,7 +49,7 @@
 - 의존 태스크: T-0006 (DB 스키마)
 - 리스크: seed 실행에 DB 연결 필요
 
-## Status: TODO
+## Status: DONE ✓
 
 ## Suggested Model
 - Claude: API 설계 / 쿼리 최적화

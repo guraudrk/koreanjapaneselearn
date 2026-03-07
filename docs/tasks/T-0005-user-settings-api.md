@@ -42,7 +42,7 @@
 ## Dependencies / Risks
 - 의존 태스크: T-0004 (Auth 완료 후)
 
-## Status: TODO
+## Status: DONE ✓
 
 ## Suggested Model
 - Claude: Guard 적용 검증

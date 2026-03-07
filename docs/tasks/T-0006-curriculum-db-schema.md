@@ -44,7 +44,7 @@ Milestone 2(커리큘럼/학습 루프)를 위한 DB 스키마를 확장한다.
 - 의존 태스크: T-0004 (schema 확장이 필요)
 - 리스크: Docker DB 없으면 migrate dev 불가
 
-## Status: TODO
+## Status: DONE ✓
 
 ## Suggested Model
 - Claude: 스키마 설계 검증

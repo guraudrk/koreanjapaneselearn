@@ -63,7 +63,7 @@ JWT Access Token(15분) + Refresh Token(7일) 기반 인증을 구현해 이후 
 - 의존 태스크: T-0003 (완료)
 - 리스크: Docker 없으면 로컬 DB 연결 불가 → .env DATABASE_URL 직접 설정 필요
 
-## Status: DOING
+## Status: DONE ✓
 
 ## Suggested Model
 - Claude: JWT 구현 검증, 보안 리뷰
