@@ -304,3 +304,160 @@ desktop: > 1024px
 - 모든 텍스트 대비율 4.5:1 이상
 - 포커스 링 표시 (outline: 2px solid --brand-both)
 - aria-label 필수 (아이콘 전용 버튼)
+
+---
+
+## 12) 🧪 TDD 기반 성능 최적화 — MVP 완료 후 적용
+
+> **적용 시점**: MVP의 모든 기능(§4)이 DONE 상태가 된 이후에만 이 섹션을 실행한다.
+> 기능 개발 중에는 테스트 코드보다 "작동하는 코드"가 우선이다.
+> 단, 테스트하기 어려운 구조가 보이면 즉시 `progress/FAILURES.md`에 기록해둔다.
+
+---
+
+### 12-1) 원칙: TDD 사이클 (Red → Green → Refactor)
+
+```
+1. Red    : 실패하는 테스트를 먼저 작성한다
+            "이 API는 200ms 안에 응답해야 한다"
+2. Green  : 테스트를 통과하는 최소한의 코드를 작성한다
+3. Refactor: 테스트가 통과된 상태에서 코드를 개선한다
+            (성능 최적화, 가독성, 중복 제거)
+```
+
+> "테스트 없는 최적화는 추측이다. 테스트 있는 최적화만이 사실이다."
+
+---
+
+### 12-2) 테스트 레이어 구성
+
+#### Layer 1 — 단위 테스트 (Unit Test)
+- **대상**: 순수 함수, 서비스 메서드, 유틸리티
+- **도구**: Jest (NestJS/백엔드), Vitest (Next.js/웹)
+- **위치**: 각 파일 옆에 `*.spec.ts` 또는 `__tests__/` 폴더
+- **커버리지 목표**: 핵심 비즈니스 로직 80% 이상
+
+```ts
+// 예시: auth.service.spec.ts
+it('should hash password on signup', async () => {
+  const result = await authService.signup({ email: 'a@b.com', password: '1234' });
+  expect(result.user.passwordHash).toBeUndefined(); // 응답에 해시 노출 금지
+});
+```
+
+#### Layer 2 — 통합 테스트 (Integration Test)
+- **대상**: API 엔드포인트 전체 흐름 (Controller → Service → DB)
+- **도구**: Jest + Supertest (NestJS), 테스트용 Postgres (docker-compose.test.yml)
+- **위치**: `apps/api/test/`
+
+```ts
+// 예시: POST /auth/signup → DB에 유저 생성 확인
+it('POST /auth/signup returns 201 and tokens', async () => {
+  const res = await request(app.getHttpServer())
+    .post('/auth/signup')
+    .send({ email: 'test@test.com', password: 'pass1234' });
+  expect(res.status).toBe(201);
+  expect(res.body).toHaveProperty('accessToken');
+});
+```
+
+#### Layer 3 — E2E 테스트 (End-to-End)
+- **대상**: 실제 사용자 시나리오 전체 흐름
+- **도구**: Playwright (웹 브라우저 자동화)
+- **위치**: `apps/web/e2e/`
+- **핵심 시나리오 (반드시 포함)**:
+  1. 회원가입 → 로그인 → 대시보드 진입
+  2. 학습 모드 변경(KR→JP→BOTH) → DB 반영 확인
+  3. 레슨 시작 → 카드 플립 → 레슨 완료 → 포인트 적립
+
+---
+
+### 12-3) 성능 목표 수치 (Performance Budget)
+
+> 아래 수치를 테스트 코드로 자동 검증한다. 수치를 넘으면 배포 차단.
+
+#### 백엔드 API 응답 시간
+| 엔드포인트 | 목표 | 한계치 |
+|------------|------|--------|
+| POST /auth/login | < 300ms | 500ms |
+| GET /curriculums | < 100ms | 200ms |
+| GET /lessons/:id | < 150ms | 300ms |
+| GET /dictionary/search | < 200ms | 400ms |
+| POST /ai/translate-explain | < 3s | 5s |
+
+#### 웹 프론트엔드 (Lighthouse 기준)
+| 지표 | 목표 | 측정 도구 |
+|------|------|-----------|
+| LCP (최대 콘텐츠 렌더링) | < 2.5s | Lighthouse |
+| FID / INP (상호작용 지연) | < 100ms | Lighthouse |
+| CLS (레이아웃 이동) | < 0.1 | Lighthouse |
+| Lighthouse 성능 점수 | 90점 이상 | Lighthouse |
+| 번들 크기 (JS) | < 200KB gzip | next build |
+
+---
+
+### 12-4) 최적화 우선순위 순서
+
+MVP 완료 후 아래 순서로 최적화를 진행한다.
+
+```
+1단계 — 측정 먼저
+  - Lighthouse로 웹 성능 점수 측정
+  - k6 또는 autocannon으로 API 부하 테스트
+  - "느린 쿼리"를 Prisma 로그로 찾아낸다
+  - FAILURES.md에 병목 위치 기록
+
+2단계 — DB/API 최적화 (효과 가장 큼)
+  - N+1 쿼리 제거 → Prisma include/select 최적화
+  - 자주 조회되는 데이터 Redis 캐싱 (사전, 커리큘럼 목록)
+  - DB 인덱스 추가 (dictionary.en, user_progress.userId+lessonId)
+  - API 응답 페이지네이션 적용 (목록 API 전체)
+
+3단계 — 프론트엔드 최적화
+  - Next.js Image 최적화 (next/image 사용)
+  - 동적 import로 무거운 컴포넌트 코드 분할
+  - TanStack Query 캐싱 전략 (staleTime 설정)
+  - FlipCard 애니메이션 will-change: transform 적용
+
+4단계 — AI 비용/성능 최적화
+  - 동일 입력 Redis 캐싱 (TTL 24시간)
+  - 프롬프트 토큰 최소화 (packages/ai-core/prompts/ 정제)
+  - 응답 스트리밍 적용 (사용자 체감 속도 개선)
+```
+
+---
+
+### 12-5) 테스트 자동화 파이프라인 (CI 연동)
+
+```yaml
+# .github/workflows/test.yml 에 추가할 내용 (요약)
+on: [push, pull_request]
+jobs:
+  test:
+    steps:
+      - run: npm test              # 단위 테스트
+      - run: npm run test:e2e      # 통합 테스트
+      - run: npx lighthouse-ci     # 성능 예산 검증
+```
+
+- PR 머지 전 모든 테스트 통과 필수
+- Lighthouse 점수 90 미만이면 PR 차단
+- 테스트 실패 원인은 반드시 `progress/FAILURES.md`에 기록
+
+---
+
+### 12-6) 테스크 생성 규칙 (TDD 단계)
+
+TDD/최적화 단계의 테스크는 아래 네이밍을 사용한다:
+
+```
+P-0001-unit-test-auth          # 단위 테스트
+P-0002-integration-test-api    # 통합 테스트
+P-0003-e2e-learning-flow       # E2E 시나리오
+P-0004-perf-db-query           # DB 쿼리 최적화
+P-0005-perf-redis-cache        # Redis 캐싱
+P-0006-perf-frontend-bundle    # 번들 최적화
+P-0007-perf-ai-cache           # AI 캐싱
+```
+
+`P-` prefix = Performance/Polish 단계. `T-` prefix의 기능 테스크와 구분한다.
