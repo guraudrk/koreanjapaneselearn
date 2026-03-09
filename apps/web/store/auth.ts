@@ -1,0 +1,59 @@
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+
+interface UserSettings {
+  learningMode: "KR" | "JP" | "BOTH";
+  notifications: boolean;
+}
+
+interface User {
+  id: string;
+  email: string;
+  nativeLanguage: string;
+  settings: UserSettings | null;
+}
+
+interface AuthState {
+  user: User | null;
+  accessToken: string | null;
+  refreshToken: string | null;
+  setAuth: (user: User, accessToken: string, refreshToken: string) => void;
+  setLearningMode: (mode: "KR" | "JP" | "BOTH") => void;
+  logout: () => void;
+  isAuthenticated: () => boolean;
+}
+
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set, get) => ({
+      user: null,
+      accessToken: null,
+      refreshToken: null,
+      setAuth: (user, accessToken, refreshToken) => {
+        set({ user, accessToken, refreshToken });
+        // also sync to localStorage for axios interceptor
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+        localStorage.setItem("userId", user.id);
+      },
+      setLearningMode: (mode) => {
+        set((state) => ({
+          user: state.user
+            ? {
+                ...state.user,
+                settings: { ...(state.user.settings ?? { notifications: true }), learningMode: mode },
+              }
+            : null,
+        }));
+      },
+      logout: () => {
+        set({ user: null, accessToken: null, refreshToken: null });
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("userId");
+      },
+      isAuthenticated: () => !!get().accessToken,
+    }),
+    { name: "lingua-auth" }
+  )
+);

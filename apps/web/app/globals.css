@@ -1,26 +1,130 @@
 @import "tailwindcss";
 
+/* ── Design System 2025 ──────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Backgrounds */
+  --bg-base:      #0D0D1A;
+  --bg-surface:   #13131F;
+  --bg-elevated:  #1C1C2E;
+
+  /* Glass */
+  --glass-bg:     rgba(255,255,255,0.04);
+  --glass-border: rgba(255,255,255,0.08);
+
+  /* Brand */
+  --brand-kr:   #FF4D6D;
+  --brand-jp:   #C084FC;
+  --brand-both: #6366F1;
+
+  /* Accents */
+  --accent-gold:  #F59E0B;
+  --accent-green: #10B981;
+  --accent-red:   #EF4444;
+
+  /* Text */
+  --text-primary:   #F0F0FF;
+  --text-secondary: #8B8BA8;
+  --text-muted:     #4A4A6A;
+
+  /* Radius */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ── Base ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+html { scroll-behavior: smooth; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'Inter', 'Noto Sans KR', 'Noto Sans JP', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ── Glass Card ──────────────────────────────────────── */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-radius: var(--radius-lg);
+}
+
+/* ── Gradient Backgrounds ────────────────────────────── */
+.gradient-kr   { background: linear-gradient(135deg, #FF4D6D22, #FF4D6D08); }
+.gradient-jp   { background: linear-gradient(135deg, #C084FC22, #C084FC08); }
+.gradient-both { background: linear-gradient(135deg, #6366F122, #6366F108); }
+
+/* ── Brand Glow ──────────────────────────────────────── */
+.glow-kr   { box-shadow: 0 0 32px rgba(255, 77, 109, 0.25); }
+.glow-jp   { box-shadow: 0 0 32px rgba(192, 132, 252, 0.25); }
+.glow-both { box-shadow: 0 0 32px rgba(99, 102, 241, 0.25); }
+
+/* ── Flip Card ───────────────────────────────────────── */
+.flip-card { perspective: 1000px; }
+.flip-card-inner {
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  position: relative;
+}
+.flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+.flip-card-front,
+.flip-card-back {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-card-back { transform: rotateY(180deg); }
+
+/* ── Micro-interactions ──────────────────────────────── */
+.btn-primary {
+  transition: transform 150ms ease, filter 150ms ease;
+}
+.btn-primary:hover {
+  transform: scale(1.02);
+  filter: brightness(1.1);
+}
+.btn-primary:active { transform: scale(0.98); }
+
+/* ── Shake animation (wrong answer) ─────────────────── */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-8px); }
+  40%       { transform: translateX(8px); }
+  60%       { transform: translateX(-8px); }
+  80%       { transform: translateX(8px); }
+}
+.shake { animation: shake 400ms ease; }
+
+/* ── Fade-in page transition ─────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 250ms ease forwards; }
+
+/* ── Progress bar ────────────────────────────────────── */
+.progress-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--glass-border);
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--brand-both), var(--brand-kr));
+  transition: width 0.6s ease-out;
+}
+
+/* ── Scrollbar ───────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--glass-border);
+  border-radius: 3px;
 }
