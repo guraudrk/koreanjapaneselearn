@@ -9,6 +9,7 @@ import { CurriculumModule } from './modules/curriculum/curriculum.module';
 import { DictionaryModule } from './modules/dictionary/dictionary.module';
 import { LearningModule } from './modules/learning/learning.module';
 import { PointsModule } from './modules/points/points.module';
+import { ShareModule } from './modules/share/share.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { PointsModule } from './modules/points/points.module';
     DictionaryModule,
     LearningModule,
     PointsModule,
+    ShareModule,
   ],
   controllers: [AppController],
   providers: [AppService],

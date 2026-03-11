@@ -51,7 +51,7 @@
 - 의존 태스크: T-0012, T-0013 (완료)
 - 리스크: share code 충돌 → nanoid/uuid 사용으로 방지
 
-## Status: DOING
+## Status: DONE ✓
 
 ## Suggested Model
 - Claude: nanoid, OG meta, public route 설계

@@ -20,6 +20,7 @@ model User {
   settings           UserSettings?
   progress           UserProgress[]
   points             PointsLedger[]
+  shareLinks         ShareLink[]
 
   @@map("users")
 }
@@ -62,6 +63,7 @@ model Lesson {
   curriculum   Curriculum   @relation(fields: [curriculumId], references: [id], onDelete: Cascade)
   cards        Card[]
   progress     UserProgress[]
+  shareLinks   ShareLink[]
 
   @@map("lessons")
 }
@@ -115,6 +117,22 @@ model PointsLedger {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("points_ledger")
+}
+
+// ──────────────────────────────────────────────
+// Share Links
+// ──────────────────────────────────────────────
+
+model ShareLink {
+  id        String   @id @default(cuid())
+  userId    String
+  lessonId  String
+  code      String   @unique
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@map("share_links")
 }
 
 // ──────────────────────────────────────────────

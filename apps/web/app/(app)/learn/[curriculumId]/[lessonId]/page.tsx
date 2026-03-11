@@ -38,6 +38,7 @@ export default function LessonPage() {
   const [bonusAwarded, setBonusAwarded] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [shareToast, setShareToast] = useState(false);
   const startRef = useRef<number>(Date.now());
 
   useEffect(() => {
@@ -136,7 +137,7 @@ export default function LessonPage() {
           )}
         </div>
 
-        <div style={{ display: "flex", gap: 12, marginTop: 8 }}>
+        <div style={{ display: "flex", gap: 12, marginTop: 8, flexWrap: "wrap", justifyContent: "center" }}>
           <button
             onClick={() => {
               setCurrentIdx(0);
@@ -157,6 +158,29 @@ export default function LessonPage() {
           >
             다시 학습
           </button>
+          <button
+            onClick={async () => {
+              try {
+                const { data } = await api.post("/share", { lessonId });
+                const url = `${window.location.origin}/share/${data.code}`;
+                await navigator.clipboard.writeText(url);
+                setShareToast(true);
+                setTimeout(() => setShareToast(false), 2500);
+              } catch { /* ignore */ }
+            }}
+            style={{
+              padding: "10px 24px",
+              borderRadius: 12,
+              border: "1px solid rgba(99,102,241,0.4)",
+              background: "rgba(99,102,241,0.1)",
+              color: "var(--brand-both)",
+              cursor: "pointer",
+              fontSize: 14,
+              fontWeight: 600,
+            }}
+          >
+            공유하기 🔗
+          </button>
           <Link
             href={`/learn/${curriculumId}`}
             style={{
@@ -173,6 +197,26 @@ export default function LessonPage() {
             다음 레슨 →
           </Link>
         </div>
+        {shareToast && (
+          <div
+            style={{
+              position: "fixed",
+              bottom: 32,
+              left: "50%",
+              transform: "translateX(-50%)",
+              background: "rgba(16,185,129,0.9)",
+              color: "#fff",
+              padding: "10px 24px",
+              borderRadius: 12,
+              fontSize: 14,
+              fontWeight: 600,
+              zIndex: 1000,
+              backdropFilter: "blur(8px)",
+            }}
+          >
+            링크가 클립보드에 복사됐어요! ✓
+          </div>
+        )}
       </div>
     );
   }
