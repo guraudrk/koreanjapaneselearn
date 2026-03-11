@@ -8,16 +8,27 @@ interface FlipCardProps {
   koReading?: string | null;
   jaReading?: string | null;
   mode: "KR" | "JP" | "BOTH";
+  externalFlipped?: boolean;
+  onFlip?: () => void;
 }
 
-export function FlipCard({ en, ko, ja, koReading, jaReading, mode }: FlipCardProps) {
-  const [flipped, setFlipped] = useState(false);
+export function FlipCard({ en, ko, ja, koReading, jaReading, mode, externalFlipped, onFlip }: FlipCardProps) {
+  const [internalFlipped, setInternalFlipped] = useState(false);
+  const flipped = externalFlipped !== undefined ? externalFlipped : internalFlipped;
+
+  function handleClick() {
+    if (externalFlipped !== undefined) {
+      onFlip?.();
+    } else {
+      setInternalFlipped((f) => !f);
+    }
+  }
 
   return (
     <div
       className={`flip-card${flipped ? " flipped" : ""}`}
       style={{ width: "100%", minHeight: 240, cursor: "pointer" }}
-      onClick={() => setFlipped((f) => !f)}
+      onClick={handleClick}
     >
       <div className="flip-card-inner" style={{ width: "100%", minHeight: 240 }}>
         {/* Front */}

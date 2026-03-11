@@ -13,13 +13,20 @@ interface Curriculum {
   lessonCount: number;
 }
 
+interface PointsBalance {
+  total: number;
+  todayEarned: number;
+}
+
 export default function DashboardPage() {
   const { user, setLearningMode } = useAuthStore();
   const mode = (user?.settings?.learningMode ?? "BOTH") as "KR" | "JP" | "BOTH";
   const [curriculums, setCurriculums] = useState<Curriculum[]>([]);
+  const [points, setPoints] = useState<PointsBalance>({ total: 0, todayEarned: 0 });
 
   useEffect(() => {
     api.get("/curriculums").then((r) => setCurriculums(r.data)).catch(() => {});
+    api.get("/points/balance").then((r) => setPoints(r.data)).catch(() => {});
   }, []);
 
   async function handleModeChange(newMode: "KR" | "JP" | "BOTH") {
@@ -73,13 +80,17 @@ export default function DashboardPage() {
         </div>
 
         {/* Points Card */}
-        <div className="glass" style={{ gridColumn: "span 4", padding: 24 }}>
-          <p style={{ fontSize: 12, color: "var(--text-secondary)", marginBottom: 8, letterSpacing: "0.08em" }}>
-            TOTAL POINTS
-          </p>
-          <div style={{ fontSize: 52, fontWeight: 800, color: "var(--accent-gold)" }}>0</div>
-          <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>누적 포인트</p>
-        </div>
+        <Link href="/points" style={{ gridColumn: "span 4", textDecoration: "none", display: "block" }}>
+          <div className="glass" style={{ padding: 24, height: "100%", cursor: "pointer" }}>
+            <p style={{ fontSize: 12, color: "var(--text-secondary)", marginBottom: 8, letterSpacing: "0.08em" }}>
+              TOTAL POINTS
+            </p>
+            <div style={{ fontSize: 52, fontWeight: 800, color: "var(--accent-gold)" }}>{points.total}</div>
+            <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>
+              누적 포인트{points.todayEarned > 0 && <span style={{ color: "var(--accent-green)", marginLeft: 8 }}>+{points.todayEarned} 오늘</span>}
+            </p>
+          </div>
+        </Link>
 
         {/* Mode Card */}
         <div className="glass" style={{ gridColumn: "span 4", padding: 24 }}>
