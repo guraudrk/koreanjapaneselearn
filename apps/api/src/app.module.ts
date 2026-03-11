@@ -7,6 +7,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { CurriculumModule } from './modules/curriculum/curriculum.module';
 import { DictionaryModule } from './modules/dictionary/dictionary.module';
+import { LearningModule } from './modules/learning/learning.module';
+import { PointsModule } from './modules/points/points.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { DictionaryModule } from './modules/dictionary/dictionary.module';
     UsersModule,
     CurriculumModule,
     DictionaryModule,
+    LearningModule,
+    PointsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
