@@ -74,12 +74,48 @@ export class LearningService {
       this.prisma.userProgress.count({ where: { userId, correct: true } }),
     ]);
     const totalPoints = await this.getTotalPoints(userId);
+    const streak = await this.getStreak(userId);
     return {
       completedCards,
       correctCards,
       correctRate: completedCards > 0 ? Math.round((correctCards / completedCards) * 100) : 0,
       totalPoints,
+      streak,
     };
+  }
+
+  private async getStreak(userId: string): Promise<number> {
+    // Get distinct activity dates (UTC days with any UserProgress record)
+    const rows = await this.prisma.$queryRaw<{ day: Date }[]>`
+      SELECT DISTINCT DATE_TRUNC('day', "createdAt" AT TIME ZONE 'UTC') AS day
+      FROM user_progress
+      WHERE "userId" = ${userId}
+      ORDER BY day DESC
+    `;
+
+    if (rows.length === 0) return 0;
+
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+
+    let streak = 0;
+    let expected = today.getTime();
+
+    for (const row of rows) {
+      const dayTs = new Date(row.day).getTime();
+      if (dayTs === expected) {
+        streak++;
+        expected -= 86400000; // subtract 1 day
+      } else if (dayTs === expected - 86400000 && streak === 0) {
+        // allow yesterday as "today" for streak start
+        streak++;
+        expected = dayTs - 86400000;
+      } else {
+        break;
+      }
+    }
+
+    return streak;
   }
 
   private async getTotalPoints(userId: string): Promise<number> {

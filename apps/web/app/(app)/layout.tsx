@@ -44,6 +44,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           { href: "/learn", icon: "▶", label: "학습" },
           { href: "/dictionary", icon: "◉", label: "사전" },
           { href: "/points", icon: "★", label: "포인트" },
+          { href: "/profile", icon: "⊙", label: "프로필" },
         ].map(({ href, icon, label }) => (
           <Link
             key={href}
@@ -73,17 +74,20 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </Link>
         ))}
 
-        <div style={{ marginTop: "auto" }}>
+        <div style={{ marginTop: "auto", paddingTop: 8, borderTop: "1px solid var(--glass-border)" }}>
+          <div style={{ fontSize: 12, color: "var(--text-muted)", padding: "0 8px 8px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            {user?.email}
+          </div>
           <button
             onClick={logout}
             style={{
               width: "100%",
-              padding: "10px 12px",
+              padding: "8px 12px",
               borderRadius: 10,
               border: "none",
               background: "transparent",
               color: "var(--text-muted)",
-              fontSize: 14,
+              fontSize: 13,
               cursor: "pointer",
               textAlign: "left",
             }}

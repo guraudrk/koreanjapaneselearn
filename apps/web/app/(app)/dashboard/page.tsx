@@ -18,15 +18,25 @@ interface PointsBalance {
   todayEarned: number;
 }
 
+interface LearningProgress {
+  completedCards: number;
+  correctCards: number;
+  correctRate: number;
+  totalPoints: number;
+  streak: number;
+}
+
 export default function DashboardPage() {
   const { user, setLearningMode } = useAuthStore();
   const mode = (user?.settings?.learningMode ?? "BOTH") as "KR" | "JP" | "BOTH";
   const [curriculums, setCurriculums] = useState<Curriculum[]>([]);
   const [points, setPoints] = useState<PointsBalance>({ total: 0, todayEarned: 0 });
+  const [progress, setProgress] = useState<LearningProgress>({ completedCards: 0, correctCards: 0, correctRate: 0, totalPoints: 0, streak: 0 });
 
   useEffect(() => {
     api.get("/curriculums").then((r) => setCurriculums(r.data)).catch(() => {});
     api.get("/points/balance").then((r) => setPoints(r.data)).catch(() => {});
+    api.get("/learning/progress").then((r) => setProgress(r.data)).catch(() => {});
   }, []);
 
   async function handleModeChange(newMode: "KR" | "JP" | "BOTH") {
@@ -54,14 +64,8 @@ export default function DashboardPage() {
       </div>
 
       {/* Bento Grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(12, 1fr)",
-          gridAutoRows: "auto",
-          gap: 16,
-        }}
-      >
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(12, 1fr)", gridAutoRows: "auto", gap: 16 }}>
+
         {/* Streak Card */}
         <div
           className="glass"
@@ -75,7 +79,12 @@ export default function DashboardPage() {
           <p style={{ fontSize: 12, color: "var(--text-secondary)", marginBottom: 8, letterSpacing: "0.08em" }}>
             TODAY&apos;S STREAK
           </p>
-          <div style={{ fontSize: 52, fontWeight: 800, color: modeColor }}>0</div>
+          <div style={{ display: "flex", alignItems: "flex-end", gap: 8 }}>
+            <div style={{ fontSize: 52, fontWeight: 800, color: modeColor, lineHeight: 1 }}>
+              {progress.streak}
+            </div>
+            <div style={{ fontSize: 22, marginBottom: 4 }}>{progress.streak > 0 ? "🔥" : "💤"}</div>
+          </div>
           <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>연속 학습일</p>
         </div>
 
@@ -85,9 +94,11 @@ export default function DashboardPage() {
             <p style={{ fontSize: 12, color: "var(--text-secondary)", marginBottom: 8, letterSpacing: "0.08em" }}>
               TOTAL POINTS
             </p>
-            <div style={{ fontSize: 52, fontWeight: 800, color: "var(--accent-gold)" }}>{points.total}</div>
+            <div style={{ fontSize: 52, fontWeight: 800, color: "var(--accent-gold)", lineHeight: 1 }}>{points.total}</div>
             <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>
-              누적 포인트{points.todayEarned > 0 && <span style={{ color: "var(--accent-green)", marginLeft: 8 }}>+{points.todayEarned} 오늘</span>}
+              누적 포인트{points.todayEarned > 0 && (
+                <span style={{ color: "var(--accent-green)", marginLeft: 8 }}>+{points.todayEarned} 오늘</span>
+              )}
             </p>
           </div>
         </Link>
@@ -103,11 +114,37 @@ export default function DashboardPage() {
           <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>현재 학습 언어</p>
         </div>
 
-        {/* Quick Start */}
+        {/* Stats row */}
+        <div className="glass" style={{ gridColumn: "span 4", padding: 20 }}>
+          <p style={{ fontSize: 12, color: "var(--text-muted)", letterSpacing: "0.08em", marginBottom: 10 }}>CARDS STUDIED</p>
+          <div style={{ fontSize: 36, fontWeight: 800, color: "var(--text-primary)" }}>{progress.completedCards}</div>
+          <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>총 학습 카드</p>
+        </div>
+
+        <div className="glass" style={{ gridColumn: "span 4", padding: 20 }}>
+          <p style={{ fontSize: 12, color: "var(--text-muted)", letterSpacing: "0.08em", marginBottom: 10 }}>CORRECT RATE</p>
+          <div style={{ fontSize: 36, fontWeight: 800, color: progress.correctRate >= 80 ? "var(--accent-green)" : progress.correctRate >= 50 ? "var(--accent-gold)" : "var(--accent-red)" }}>
+            {progress.correctRate}%
+          </div>
+          <div style={{ marginTop: 8, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.08)" }}>
+            <div style={{ height: "100%", borderRadius: 2, width: `${progress.correctRate}%`, background: progress.correctRate >= 80 ? "var(--accent-green)" : "var(--accent-gold)", transition: "width 0.6s ease" }} />
+          </div>
+        </div>
+
+        <div className="glass" style={{ gridColumn: "span 4", padding: 20 }}>
+          <p style={{ fontSize: 12, color: "var(--text-muted)", letterSpacing: "0.08em", marginBottom: 10 }}>CORRECT CARDS</p>
+          <div style={{ fontSize: 36, fontWeight: 800, color: "var(--accent-green)" }}>{progress.correctCards}</div>
+          <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>정답 카드 수</p>
+        </div>
+
+        {/* Curriculum List */}
         <div className="glass" style={{ gridColumn: "span 8", padding: 28 }}>
-          <h2 style={{ fontSize: 16, fontWeight: 600, marginBottom: 16, color: "var(--text-primary)" }}>
-            커리큘럼
-          </h2>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+            <h2 style={{ fontSize: 16, fontWeight: 600, color: "var(--text-primary)" }}>커리큘럼</h2>
+            <Link href="/learn" style={{ fontSize: 12, color: "var(--text-muted)", textDecoration: "none" }}>
+              전체 보기 →
+            </Link>
+          </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {curriculums.length === 0 ? (
               <p style={{ color: "var(--text-muted)", fontSize: 14 }}>커리큘럼을 불러오는 중...</p>
@@ -137,7 +174,7 @@ export default function DashboardPage() {
                       <span style={{ fontSize: 12, color: "var(--text-muted)", marginLeft: 8 }}>{c.level}</span>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                      <span style={{ fontSize: 12, color: color }}>{c.lessonCount}개 레슨</span>
+                      <span style={{ fontSize: 12, color }}>{c.lessonCount}개 레슨</span>
                       <span style={{ fontSize: 12, color: "var(--text-muted)" }}>→</span>
                     </div>
                   </Link>
@@ -165,6 +202,7 @@ export default function DashboardPage() {
             <strong style={{ color: "var(--brand-jp)" }}>じゅんび</strong>는 같은 한자어예요!
           </p>
         </div>
+
       </div>
     </div>
   );
