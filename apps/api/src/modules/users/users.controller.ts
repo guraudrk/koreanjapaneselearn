@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Body, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Patch, Body, Req, UseGuards, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UsersService } from './users.service';
@@ -16,11 +16,12 @@ export class UsersController {
   @Get()
   async getMe(@Req() req: AuthRequest) {
     const user = await this.usersService.findById(req.user.id);
+    if (!user) throw new UnauthorizedException('User not found');
     return {
-      id: user!.id,
-      email: user!.email,
-      nativeLanguage: user!.nativeLanguage,
-      settings: user!.settings,
+      id: user.id,
+      email: user.email,
+      nativeLanguage: user.nativeLanguage,
+      settings: user.settings,
     };
   }
 

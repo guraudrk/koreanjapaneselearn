@@ -86,6 +86,12 @@ export default function LessonPage() {
 
   if (loading) return <div style={{ padding: 32, color: "var(--text-muted)" }}>불러오는 중...</div>;
   if (!lesson) return <div style={{ padding: 32, color: "var(--accent-red)" }}>레슨을 찾을 수 없습니다.</div>;
+  if (lesson.cards.length === 0) return (
+    <div style={{ padding: 32, textAlign: "center", color: "var(--text-muted)" }}>
+      <p>이 레슨에 카드가 없습니다.</p>
+      <Link href={`/learn/${curriculumId}`} style={{ color: "var(--brand-both)", textDecoration: "none" }}>← 레슨 목록으로</Link>
+    </div>
+  );
 
   const cards = lesson.cards;
   const progress = cards.length > 0 ? (currentIdx / cards.length) * 100 : 0;

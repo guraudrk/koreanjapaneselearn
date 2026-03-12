@@ -25,6 +25,7 @@ export class LearningService {
     ]);
 
     let pointsAwarded = 0;
+
     if (dto.correct) {
       pointsAwarded += POINTS_CORRECT;
       await this.prisma.pointsLedger.create({
@@ -37,29 +38,43 @@ export class LearningService {
       });
     }
 
-    // Check if lesson is complete (all cards answered correctly at least once)
+    // Check lesson completion — only when a specific card was submitted
     if (dto.cardId) {
       const lesson = await this.prisma.lesson.findUnique({
         where: { id: dto.lessonId },
         include: { _count: { select: { cards: true } } },
       });
-      const correctCount = await this.prisma.userProgress.count({
-        where: { userId, lessonId: dto.lessonId, correct: true },
-      });
-      if (lesson && correctCount >= lesson._count.cards) {
-        const alreadyAwarded = await this.prisma.pointsLedger.findFirst({
-          where: { userId, reason: 'LESSON_COMPLETE', refId: dto.lessonId },
+
+      if (lesson && lesson._count.cards > 0) {
+        // FIX: count DISTINCT cardIds that were answered correctly at least once
+        // (prevents same card answered multiple times from inflating the count)
+        const distinctCorrectCards = await this.prisma.userProgress.findMany({
+          where: { userId, lessonId: dto.lessonId, correct: true, cardId: { not: null } },
+          select: { cardId: true },
+          distinct: ['cardId'],
         });
-        if (!alreadyAwarded) {
-          pointsAwarded += POINTS_LESSON_COMPLETE;
-          await this.prisma.pointsLedger.create({
-            data: {
-              userId,
-              delta: POINTS_LESSON_COMPLETE,
-              reason: 'LESSON_COMPLETE',
-              refId: dto.lessonId,
-            },
+
+        if (distinctCorrectCards.length >= lesson._count.cards) {
+          // FIX: wrap check+create in transaction to prevent race condition
+          // on concurrent requests both passing the "already awarded" check
+          const bonusAwarded = await this.prisma.$transaction(async (tx) => {
+            const alreadyAwarded = await tx.pointsLedger.findFirst({
+              where: { userId, reason: 'LESSON_COMPLETE', refId: dto.lessonId },
+            });
+            if (alreadyAwarded) return false;
+
+            await tx.pointsLedger.create({
+              data: {
+                userId,
+                delta: POINTS_LESSON_COMPLETE,
+                reason: 'LESSON_COMPLETE',
+                refId: dto.lessonId,
+              },
+            });
+            return true;
           });
+
+          if (bonusAwarded) pointsAwarded += POINTS_LESSON_COMPLETE;
         }
       }
     }
@@ -85,7 +100,6 @@ export class LearningService {
   }
 
   private async getStreak(userId: string): Promise<number> {
-    // Get distinct activity dates (UTC days with any UserProgress record)
     const rows = await this.prisma.$queryRaw<{ day: Date }[]>`
       SELECT DISTINCT DATE_TRUNC('day', "createdAt" AT TIME ZONE 'UTC') AS day
       FROM user_progress
@@ -105,9 +119,9 @@ export class LearningService {
       const dayTs = new Date(row.day).getTime();
       if (dayTs === expected) {
         streak++;
-        expected -= 86400000; // subtract 1 day
+        expected -= 86400000;
       } else if (dayTs === expected - 86400000 && streak === 0) {
-        // allow yesterday as "today" for streak start
+        // yesterday counts as streak start (today not yet studied)
         streak++;
         expected = dayTs - 86400000;
       } else {

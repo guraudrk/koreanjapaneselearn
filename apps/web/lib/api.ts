@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useAuthStore } from "@/store/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
 
@@ -7,10 +8,10 @@ export const api = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
-// Attach access token from localStorage on every request
+// Attach access token from Zustand store on every request
 api.interceptors.request.use((config) => {
   if (typeof window !== "undefined") {
-    const token = localStorage.getItem("accessToken");
+    const token = useAuthStore.getState().accessToken;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -18,7 +19,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Auto-refresh on 401
+// Auto-refresh on 401 — then sync new tokens back to Zustand store
 api.interceptors.response.use(
   (res) => res,
   async (err) => {
@@ -26,21 +27,20 @@ api.interceptors.response.use(
     if (err.response?.status === 401 && !original._retry) {
       original._retry = true;
       try {
-        const userId = localStorage.getItem("userId");
-        const refreshToken = localStorage.getItem("refreshToken");
-        if (userId && refreshToken) {
+        const { user, refreshToken, updateTokens, logout } = useAuthStore.getState();
+        if (user?.id && refreshToken) {
           const { data } = await axios.post(`${API_URL}/auth/refresh`, {
-            userId,
+            userId: user.id,
             refreshToken,
           });
-          localStorage.setItem("accessToken", data.accessToken);
-          localStorage.setItem("refreshToken", data.refreshToken);
+          // Sync new tokens into Zustand (persist will auto-save to localStorage)
+          updateTokens(data.accessToken, data.refreshToken);
           original.headers.Authorization = `Bearer ${data.accessToken}`;
           return api(original);
         }
       } catch {
-        localStorage.clear();
-        window.location.href = "/login";
+        useAuthStore.getState().logout();
+        if (typeof window !== "undefined") window.location.href = "/login";
       }
     }
     return Promise.reject(err);
