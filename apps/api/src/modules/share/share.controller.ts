@@ -8,8 +8,8 @@ export class ShareController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  create(@Request() req: { user: { sub: string } }, @Body() body: { lessonId: string }) {
-    return this.shareService.createShare(req.user.sub, body.lessonId);
+  create(@Request() req: { user: { id: string } }, @Body() body: { lessonId: string }) {
+    return this.shareService.createShare(req.user.id, body.lessonId);
   }
 
   @Get(':code')
