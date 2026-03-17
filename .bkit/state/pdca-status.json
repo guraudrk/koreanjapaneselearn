@@ -1,0 +1,859 @@
+{
+  "version": "2.0",
+  "lastUpdated": "2026-03-17T00:00:00.000Z",
+  "archived": {
+    "deployment": {
+      "phase": "archived",
+      "matchRate": 100,
+      "iterationCount": 0,
+      "startedAt": "2026-03-06T09:14:05.333Z",
+      "archivedAt": "2026-03-17T00:00:00.000Z",
+      "archivedTo": "docs/archive/2026-03/deployment/"
+    }
+  },
+  "activeFeatures": [
+    "prisma",
+    "api",
+    "users",
+    "dto",
+    "strategies",
+    "guards",
+    "auth",
+    "curriculum",
+    "web",
+    "store",
+    "ui",
+    "login",
+    "signup",
+    "(app)",
+    "dashboard",
+    "[curriculumId]",
+    "[lessonId]",
+    "dictionary",
+    "learning",
+    "points",
+    "share",
+    "[code]",
+    "learn",
+    "profile"
+  ],
+  "primaryFeature": "prisma",
+  "features": {
+    "prisma": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-07T04:17:03.249Z",
+        "lastUpdated": "2026-03-07T05:02:09.952Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\prisma\\seed.ts"
+    },
+    "api": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-07T04:17:12.626Z",
+        "lastUpdated": "2026-03-12T14:33:34.994Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\main.ts"
+    },
+    "users": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-07T04:59:33.697Z",
+        "lastUpdated": "2026-03-12T14:49:03.686Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\modules\\users\\users.controller.ts"
+    },
+    "dto": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-07T04:59:37.053Z",
+        "lastUpdated": "2026-03-07T05:00:25.723Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\modules\\users\\dto\\update-settings.dto.ts"
+    },
+    "strategies": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-07T04:59:40.624Z",
+        "lastUpdated": "2026-03-07T04:59:40.624Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\modules\\auth\\strategies\\jwt.strategy.ts"
+    },
+    "guards": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-07T04:59:41.119Z",
+        "lastUpdated": "2026-03-07T04:59:41.119Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\modules\\auth\\guards\\jwt-auth.guard.ts"
+    },
+    "auth": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-07T04:59:52.290Z",
+        "lastUpdated": "2026-03-07T04:59:59.385Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\modules\\auth\\auth.module.ts"
+    },
+    "curriculum": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-07T05:01:47.156Z",
+        "lastUpdated": "2026-03-07T05:01:50.402Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\modules\\curriculum\\curriculum.module.ts"
+    },
+    "web": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-09T06:31:34.728Z",
+        "lastUpdated": "2026-03-12T14:49:29.830Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\lib\\api.ts"
+    },
+    "store": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-09T06:31:52.520Z",
+        "lastUpdated": "2026-03-12T14:49:19.096Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\store\\auth.ts"
+    },
+    "ui": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-09T06:32:01.438Z",
+        "lastUpdated": "2026-03-11T14:24:47.574Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\components\\ui\\FlipCard.tsx"
+    },
+    "login": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-09T06:32:31.661Z",
+        "lastUpdated": "2026-03-09T06:32:31.661Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\(auth)\\login\\page.tsx"
+    },
+    "signup": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-09T06:32:46.025Z",
+        "lastUpdated": "2026-03-09T06:32:46.025Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\(auth)\\signup\\page.tsx"
+    },
+    "(app)": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-09T06:32:58.912Z",
+        "lastUpdated": "2026-03-12T14:39:46.572Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\(app)\\loading.tsx"
+    },
+    "dashboard": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-09T06:33:20.858Z",
+        "lastUpdated": "2026-03-12T14:35:32.822Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\(app)\\dashboard\\page.tsx"
+    },
+    "[curriculumId]": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-09T06:33:39.908Z",
+        "lastUpdated": "2026-03-09T06:33:39.908Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\(app)\\learn\\[curriculumId]\\page.tsx"
+    },
+    "[lessonId]": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-09T06:33:56.565Z",
+        "lastUpdated": "2026-03-12T14:49:38.420Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\(app)\\learn\\[curriculumId]\\[lessonId]\\page.tsx"
+    },
+    "dictionary": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-11T14:17:57.516Z",
+        "lastUpdated": "2026-03-11T14:18:38.555Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\(app)\\dictionary\\page.tsx"
+    },
+    "learning": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-11T14:21:06.851Z",
+        "lastUpdated": "2026-03-12T14:48:52.536Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\modules\\learning\\learning.service.ts"
+    },
+    "points": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-11T14:21:16.409Z",
+        "lastUpdated": "2026-03-11T14:25:42.485Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\(app)\\points\\page.tsx"
+    },
+    "share": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-11T14:29:35.635Z",
+        "lastUpdated": "2026-03-12T14:33:16.535Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\modules\\share\\share.controller.ts"
+    },
+    "[code]": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-11T14:31:19.654Z",
+        "lastUpdated": "2026-03-11T14:31:19.654Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\share\\[code]\\page.tsx"
+    },
+    "learn": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-12T14:33:52.338Z",
+        "lastUpdated": "2026-03-12T14:33:52.338Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\(app)\\learn\\page.tsx"
+    },
+    "profile": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-12T14:36:07.440Z",
+        "lastUpdated": "2026-03-12T14:36:07.440Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\(app)\\profile\\page.tsx"
+    }
+  },
+  "pipeline": {
+    "currentPhase": 1,
+    "level": "Dynamic",
+    "phaseHistory": []
+  },
+  "session": {
+    "startedAt": "2026-03-06T09:14:05.333Z",
+    "onboardingCompleted": false,
+    "lastActivity": "2026-03-12T14:49:38.420Z"
+  },
+  "history": [
+    {
+      "timestamp": "2026-03-07T04:17:03.249Z",
+      "feature": "prisma",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T04:17:05.858Z",
+      "feature": "prisma",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T04:17:12.626Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T04:59:33.697Z",
+      "feature": "users",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T04:59:34.317Z",
+      "feature": "users",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T04:59:37.053Z",
+      "feature": "dto",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T04:59:37.432Z",
+      "feature": "dto",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T04:59:40.624Z",
+      "feature": "strategies",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T04:59:41.119Z",
+      "feature": "guards",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T04:59:52.290Z",
+      "feature": "auth",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T04:59:57.866Z",
+      "feature": "auth",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T04:59:59.385Z",
+      "feature": "auth",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T05:00:03.552Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T05:00:25.723Z",
+      "feature": "dto",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T05:00:28.847Z",
+      "feature": "users",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T05:00:38.941Z",
+      "feature": "users",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T05:00:41.624Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T05:00:44.092Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T05:01:47.156Z",
+      "feature": "curriculum",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T05:01:49.373Z",
+      "feature": "curriculum",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T05:01:50.402Z",
+      "feature": "curriculum",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T05:02:09.952Z",
+      "feature": "prisma",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T05:02:22.784Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-07T05:02:25.198Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-09T06:31:34.728Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-09T06:31:47.084Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-09T06:31:52.520Z",
+      "feature": "store",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-09T06:32:01.438Z",
+      "feature": "ui",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-09T06:32:11.992Z",
+      "feature": "ui",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-09T06:32:31.661Z",
+      "feature": "login",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-09T06:32:46.025Z",
+      "feature": "signup",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-09T06:32:58.912Z",
+      "feature": "(app)",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-09T06:33:20.858Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-09T06:33:39.908Z",
+      "feature": "[curriculumId]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-09T06:33:56.565Z",
+      "feature": "[lessonId]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-09T06:35:07.318Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:17:57.516Z",
+      "feature": "dictionary",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:17:59.619Z",
+      "feature": "dictionary",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:18:00.504Z",
+      "feature": "dictionary",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:18:08.826Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:18:09.257Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:18:38.555Z",
+      "feature": "dictionary",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:21:06.851Z",
+      "feature": "learning",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:21:11.226Z",
+      "feature": "learning",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:21:11.903Z",
+      "feature": "learning",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:21:16.409Z",
+      "feature": "points",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:21:18.225Z",
+      "feature": "points",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:21:19.101Z",
+      "feature": "points",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:21:24.006Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:21:24.614Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:22:52.631Z",
+      "feature": "[lessonId]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:24:47.574Z",
+      "feature": "ui",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:25:07.542Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:25:15.783Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:25:42.486Z",
+      "feature": "points",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:25:47.892Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:25:58.890Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:29:35.635Z",
+      "feature": "share",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:29:40.878Z",
+      "feature": "share",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:29:44.981Z",
+      "feature": "share",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:29:48.610Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:29:53.288Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:31:19.654Z",
+      "feature": "[code]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:31:38.372Z",
+      "feature": "[lessonId]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-11T14:31:52.017Z",
+      "feature": "[lessonId]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T14:33:16.535Z",
+      "feature": "share",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T14:33:34.994Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T14:33:52.338Z",
+      "feature": "learn",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T14:34:53.222Z",
+      "feature": "learning",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T14:35:32.822Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T14:36:07.440Z",
+      "feature": "profile",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T14:36:13.718Z",
+      "feature": "(app)",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T14:36:21.977Z",
+      "feature": "(app)",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T14:39:25.331Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T14:39:35.809Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T14:39:46.572Z",
+      "feature": "(app)",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T14:48:52.536Z",
+      "feature": "learning",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T14:48:57.692Z",
+      "feature": "users",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T14:49:03.686Z",
+      "feature": "users",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T14:49:19.096Z",
+      "feature": "store",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T14:49:29.830Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T14:49:38.420Z",
+      "feature": "[lessonId]",
+      "phase": "do",
+      "action": "updated"
+    }
+  ]
+}
