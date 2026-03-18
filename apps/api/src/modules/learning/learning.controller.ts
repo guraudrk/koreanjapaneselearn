@@ -1,5 +1,6 @@
 import { Controller, Post, Get, Body, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { LearningService } from './learning.service';
 
@@ -8,9 +9,18 @@ interface AuthRequest extends Request {
 }
 
 class SubmitDto {
+  @IsString()
   lessonId: string;
+
+  @IsOptional()
+  @IsString()
   cardId?: string;
+
+  @IsBoolean()
   correct: boolean;
+
+  @IsOptional()
+  @IsNumber()
   latencyMs?: number;
 }
 
