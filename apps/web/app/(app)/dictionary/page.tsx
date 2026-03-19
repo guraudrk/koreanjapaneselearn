@@ -13,11 +13,19 @@ interface DictionaryEntry {
   examples: { en: string; ko: string; ja: string }[] | null;
 }
 
+interface AiResult {
+  translations: Record<string, string>;
+  explanation: string;
+  usage: { usedToday: number; remainingToday: number };
+}
+
 export default function DictionaryPage() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<DictionaryEntry[]>([]);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
+  const [aiResult, setAiResult] = useState<Record<string, AiResult | null>>({});
+  const [aiLoading, setAiLoading] = useState<Record<string, boolean>>({});
 
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -31,6 +39,28 @@ export default function DictionaryPage() {
       setResults([]);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleAiExplain(entryId: string, inputText: string, inputLang: string, output: string[]) {
+    setAiLoading((prev) => ({ ...prev, [entryId]: true }));
+    try {
+      const { data } = await api.post("/ai/translate-explain", { inputText, inputLang, output });
+      setAiResult((prev) => ({ ...prev, [entryId]: data }));
+    } catch (err: unknown) {
+      const status = (err as { response?: { status?: number } })?.response?.status;
+      if (status === 429) {
+        setAiResult((prev) => ({
+          ...prev,
+          [entryId]: {
+            translations: {},
+            explanation: "오늘 AI 설명 한도(20회)를 모두 사용했어요. 내일 다시 시도해보세요!",
+            usage: { usedToday: 20, remainingToday: 0 },
+          },
+        }));
+      }
+    } finally {
+      setAiLoading((prev) => ({ ...prev, [entryId]: false }));
     }
   }
 
@@ -196,6 +226,40 @@ export default function DictionaryPage() {
                   ))}
                 </div>
               )}
+
+              {/* AI 설명 */}
+              <div style={{ marginTop: 14, paddingTop: 14, borderTop: "1px solid var(--glass-border)" }}>
+                <button
+                  onClick={() => handleAiExplain(entry.id, entry.en, "en", ["ko", "ja"])}
+                  disabled={aiLoading[entry.id]}
+                  style={{
+                    padding: "7px 16px",
+                    borderRadius: 10,
+                    border: "1px solid rgba(99,102,241,0.35)",
+                    background: "rgba(99,102,241,0.08)",
+                    color: "var(--brand-both)",
+                    cursor: "pointer",
+                    fontSize: 13,
+                    fontWeight: 600,
+                  }}
+                >
+                  {aiLoading[entry.id] ? "AI 분석 중..." : "✨ AI 설명"}
+                </button>
+
+                {aiResult[entry.id] && (
+                  <div
+                    className="glass"
+                    style={{ marginTop: 10, padding: 14, background: "rgba(99,102,241,0.05)" }}
+                  >
+                    <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.7, margin: 0 }}>
+                      {aiResult[entry.id]!.explanation}
+                    </p>
+                    <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 8, marginBottom: 0 }}>
+                      오늘 남은 횟수: {aiResult[entry.id]!.usage.remainingToday}회
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>

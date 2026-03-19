@@ -10,6 +10,7 @@ import { DictionaryModule } from './modules/dictionary/dictionary.module';
 import { LearningModule } from './modules/learning/learning.module';
 import { PointsModule } from './modules/points/points.module';
 import { ShareModule } from './modules/share/share.module';
+import { AiModule } from './modules/ai/ai.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ShareModule } from './modules/share/share.module';
     LearningModule,
     PointsModule,
     ShareModule,
+    AiModule,
   ],
   controllers: [AppController],
   providers: [AppService],

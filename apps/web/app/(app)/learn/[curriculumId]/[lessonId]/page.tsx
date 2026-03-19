@@ -24,6 +24,12 @@ interface LessonDetail {
 
 type AnswerState = "idle" | "correct" | "wrong";
 
+interface AiResult {
+  translations: Record<string, string>;
+  explanation: string;
+  usage: { usedToday: number; remainingToday: number };
+}
+
 export default function LessonPage() {
   const { curriculumId, lessonId } = useParams<{ curriculumId: string; lessonId: string }>();
   const { user } = useAuthStore();
@@ -39,6 +45,8 @@ export default function LessonPage() {
   const [completed, setCompleted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [shareToast, setShareToast] = useState(false);
+  const [aiResult, setAiResult] = useState<AiResult | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
   const startRef = useRef<number>(Date.now());
 
   useEffect(() => {
@@ -75,6 +83,7 @@ export default function LessonPage() {
       setAnswerState("idle");
       setFlipped(false);
       setPointsEarned(0);
+      setAiResult(null);
       startRef.current = Date.now();
       if (lesson && currentIdx < lesson.cards.length - 1) {
         setCurrentIdx((i) => i + 1);
@@ -82,6 +91,30 @@ export default function LessonPage() {
         setCompleted(true);
       }
     }, 900);
+  }
+
+  async function handleAiExplain(inputText: string) {
+    setAiLoading(true);
+    try {
+      const { data } = await api.post("/ai/translate-explain", {
+        inputText,
+        inputLang: "en",
+        output: ["ko", "ja"],
+      });
+      setAiResult(data);
+    } catch (err: unknown) {
+      const status = (err as { response?: { status?: number } })?.response?.status;
+      setAiResult({
+        translations: {},
+        explanation:
+          status === 429
+            ? "오늘 AI 설명 한도(20회)를 모두 사용했어요. 내일 다시 시도해보세요!"
+            : "AI 설명을 불러오지 못했습니다.",
+        usage: { usedToday: 20, remainingToday: 0 },
+      });
+    } finally {
+      setAiLoading(false);
+    }
   }
 
   if (loading) return <div style={{ padding: 32, color: "var(--text-muted)" }}>불러오는 중...</div>;
@@ -333,6 +366,42 @@ export default function LessonPage() {
           >
             알아요 ✓
           </button>
+        </div>
+      )}
+
+      {/* AI 설명 보기 — flipped 상태에서 표시 */}
+      {flipped && answerState === "idle" && card && (
+        <div style={{ marginTop: 16 }}>
+          <button
+            onClick={() => handleAiExplain(card.en)}
+            disabled={aiLoading}
+            style={{
+              width: "100%",
+              padding: "10px",
+              borderRadius: 12,
+              border: "1px solid rgba(99,102,241,0.35)",
+              background: "rgba(99,102,241,0.07)",
+              color: "var(--brand-both)",
+              cursor: "pointer",
+              fontSize: 13,
+              fontWeight: 600,
+            }}
+          >
+            {aiLoading ? "AI 분석 중..." : "✨ AI 설명 보기"}
+          </button>
+          {aiResult && (
+            <div
+              className="glass fade-up"
+              style={{ marginTop: 10, padding: 14, background: "rgba(99,102,241,0.05)" }}
+            >
+              <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.7, margin: 0 }}>
+                {aiResult.explanation}
+              </p>
+              <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 8, marginBottom: 0 }}>
+                오늘 남은 횟수: {aiResult.usage.remainingToday}회
+              </p>
+            </div>
+          )}
         </div>
       )}
 
