@@ -56,6 +56,22 @@
 
 ---
 
+### 4. 언어 스위처 우측 상단 고정 (추가 작업)
+
+| 페이지 | 위치 |
+|--------|------|
+| 랜딩 페이지 | 네비 맨 우측 끝 |
+| 로그인 / 회원가입 | `position: fixed` top-right (16px / 20px) |
+| 앱 페이지 전체 | 상단 헤더 바(height 48px) 우측 고정, 사이드바에서 제거 |
+
+앱 레이아웃 구조 변경:
+- 기존: 사이드바 내부에 LanguageSwitcher
+- 변경: `position: fixed` 상단 헤더 바 추가 → LanguageSwitcher 우측 상단 고정
+- 사이드바는 `position: fixed` left=0, 헤더는 left=220(sidebar width)
+
+---
+
 ## 관련 커밋
 
 - `9c23ca9` feat: i18n 다국어 지원 — EN/KO/JA 언어 전환 + 로고 홈 링크
+- `318fa66` feat: 언어 스위처 우측 상단 고정
