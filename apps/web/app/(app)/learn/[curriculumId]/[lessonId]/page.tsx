@@ -5,6 +5,7 @@ import Link from "next/link";
 import { api } from "@/lib/api";
 import { FlipCard } from "@/components/ui/FlipCard";
 import { useAuthStore } from "@/store/auth";
+import { useT } from "@/lib/i18n";
 
 interface Card {
   id: string;
@@ -33,6 +34,7 @@ interface AiResult {
 export default function LessonPage() {
   const { curriculumId, lessonId } = useParams<{ curriculumId: string; lessonId: string }>();
   const { user } = useAuthStore();
+  const t = useT();
   const mode = (user?.settings?.learningMode ?? "BOTH") as "KR" | "JP" | "BOTH";
 
   const [lesson, setLesson] = useState<LessonDetail | null>(null);
@@ -63,7 +65,6 @@ export default function LessonPage() {
 
     setAnswerState(correct ? "correct" : "wrong");
 
-    // Submit to API (optimistic — don't block UI)
     try {
       const { data } = await api.post("/learning/submit", {
         lessonId,
@@ -78,7 +79,6 @@ export default function LessonPage() {
       }
     } catch { /* DB not connected, UI still works */ }
 
-    // Auto-advance after feedback
     setTimeout(() => {
       setAnswerState("idle");
       setFlipped(false);
@@ -106,10 +106,7 @@ export default function LessonPage() {
       const status = (err as { response?: { status?: number } })?.response?.status;
       setAiResult({
         translations: {},
-        explanation:
-          status === 429
-            ? "오늘 AI 설명 한도(20회)를 모두 사용했어요. 내일 다시 시도해보세요!"
-            : "AI 설명을 불러오지 못했습니다.",
+        explanation: status === 429 ? t("common.ai_limit") : t("common.ai_error"),
         usage: { usedToday: 20, remainingToday: 0 },
       });
     } finally {
@@ -117,12 +114,12 @@ export default function LessonPage() {
     }
   }
 
-  if (loading) return <div style={{ padding: 32, color: "var(--text-muted)" }}>불러오는 중...</div>;
-  if (!lesson) return <div style={{ padding: 32, color: "var(--accent-red)" }}>레슨을 찾을 수 없습니다.</div>;
+  if (loading) return <div style={{ padding: 32, color: "var(--text-muted)" }}>{t("lesson.loading")}</div>;
+  if (!lesson) return <div style={{ padding: 32, color: "var(--accent-red)" }}>{t("lesson.not_found")}</div>;
   if (lesson.cards.length === 0) return (
     <div style={{ padding: 32, textAlign: "center", color: "var(--text-muted)" }}>
-      <p>이 레슨에 카드가 없습니다.</p>
-      <Link href={`/learn/${curriculumId}`} style={{ color: "var(--brand-both)", textDecoration: "none" }}>← 레슨 목록으로</Link>
+      <p>{t("lesson.no_cards")}</p>
+      <Link href={`/learn/${curriculumId}`} style={{ color: "var(--brand-both)", textDecoration: "none" }}>{t("lesson.back_lessons")}</Link>
     </div>
   );
 
@@ -145,12 +142,11 @@ export default function LessonPage() {
         }}
       >
         <div style={{ fontSize: 64 }}>🎉</div>
-        <h2 style={{ fontSize: 28, fontWeight: 700 }}>레슨 완료!</h2>
+        <h2 style={{ fontSize: 28, fontWeight: 700 }}>{t("lesson.complete_title")}</h2>
         <p style={{ fontSize: 15, color: "var(--text-secondary)" }}>
-          {cards.length}개 카드를 모두 학습했습니다
+          {t("lesson.complete_desc", { n: cards.length })}
         </p>
 
-        {/* Points summary */}
         <div
           className="glass"
           style={{
@@ -166,12 +162,12 @@ export default function LessonPage() {
             <div style={{ fontSize: 28, fontWeight: 800, color: "var(--accent-gold)" }}>
               +{totalPointsThisLesson}
             </div>
-            <div style={{ fontSize: 12, color: "var(--text-muted)" }}>이번 레슨 포인트</div>
+            <div style={{ fontSize: 12, color: "var(--text-muted)" }}>{t("lesson.points_this")}</div>
           </div>
           {bonusAwarded && (
             <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 20, fontWeight: 700, color: "var(--accent-green)" }}>+50 보너스!</div>
-              <div style={{ fontSize: 12, color: "var(--text-muted)" }}>레슨 완료</div>
+              <div style={{ fontSize: 20, fontWeight: 700, color: "var(--accent-green)" }}>+50 Bonus!</div>
+              <div style={{ fontSize: 12, color: "var(--text-muted)" }}>{t("lesson.bonus")}</div>
             </div>
           )}
         </div>
@@ -195,7 +191,7 @@ export default function LessonPage() {
               fontSize: 14,
             }}
           >
-            다시 학습
+            {t("lesson.retry")}
           </button>
           <button
             onClick={async () => {
@@ -218,7 +214,7 @@ export default function LessonPage() {
               fontWeight: 600,
             }}
           >
-            공유하기 🔗
+            {t("lesson.share")}
           </button>
           <Link
             href={`/learn/${curriculumId}`}
@@ -233,7 +229,7 @@ export default function LessonPage() {
               fontWeight: 600,
             }}
           >
-            다음 레슨 →
+            {t("lesson.next")}
           </Link>
         </div>
         {shareToast && (
@@ -253,7 +249,7 @@ export default function LessonPage() {
               backdropFilter: "blur(8px)",
             }}
           >
-            링크가 클립보드에 복사됐어요! ✓
+            {t("lesson.share_toast")}
           </div>
         )}
       </div>
@@ -302,7 +298,7 @@ export default function LessonPage() {
         </div>
       )}
 
-      {/* Flip Card — with answer state border */}
+      {/* Flip Card */}
       {card && (
         <div
           className={answerState === "wrong" ? "shake" : ""}
@@ -326,12 +322,9 @@ export default function LessonPage() {
         </div>
       )}
 
-      {/* Answer buttons — show after flip */}
+      {/* Answer buttons */}
       {flipped && answerState === "idle" && (
-        <div
-          className="fade-up"
-          style={{ display: "flex", gap: 12, marginTop: 20 }}
-        >
+        <div className="fade-up" style={{ display: "flex", gap: 12, marginTop: 20 }}>
           <button
             onClick={() => handleAnswer(false)}
             className="btn-primary"
@@ -347,7 +340,7 @@ export default function LessonPage() {
               fontWeight: 700,
             }}
           >
-            몰라요 ✗
+            {t("lesson.wrong")}
           </button>
           <button
             onClick={() => handleAnswer(true)}
@@ -364,12 +357,12 @@ export default function LessonPage() {
               fontWeight: 700,
             }}
           >
-            알아요 ✓
+            {t("lesson.correct")}
           </button>
         </div>
       )}
 
-      {/* AI 설명 보기 — flipped 상태에서 표시 */}
+      {/* AI Explain */}
       {flipped && answerState === "idle" && card && (
         <div style={{ marginTop: 16 }}>
           <button
@@ -387,28 +380,25 @@ export default function LessonPage() {
               fontWeight: 600,
             }}
           >
-            {aiLoading ? "AI 분석 중..." : "✨ AI 설명 보기"}
+            {aiLoading ? t("common.ai_analyzing") : t("lesson.ai_btn")}
           </button>
           {aiResult && (
-            <div
-              className="glass fade-up"
-              style={{ marginTop: 10, padding: 14, background: "rgba(99,102,241,0.05)" }}
-            >
+            <div className="glass fade-up" style={{ marginTop: 10, padding: 14, background: "rgba(99,102,241,0.05)" }}>
               <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.7, margin: 0 }}>
                 {aiResult.explanation}
               </p>
               <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 8, marginBottom: 0 }}>
-                오늘 남은 횟수: {aiResult.usage.remainingToday}회
+                {t("common.ai_remaining", { n: aiResult.usage.remainingToday })}
               </p>
             </div>
           )}
         </div>
       )}
 
-      {/* Hint when not flipped */}
+      {/* Flip hint */}
       {!flipped && answerState === "idle" && (
         <p style={{ textAlign: "center", marginTop: 16, fontSize: 13, color: "var(--text-muted)" }}>
-          카드를 탭해서 뒤집어보세요
+          {t("lesson.flip_hint")}
         </p>
       )}
     </div>

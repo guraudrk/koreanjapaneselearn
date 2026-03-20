@@ -4,9 +4,11 @@ import { useAuthStore } from "@/store/auth";
 import { api } from "@/lib/api";
 import { ModeSwitch } from "@/components/ui/ModeSwitch";
 import Link from "next/link";
+import { useT } from "@/lib/i18n";
 
 export default function ProfilePage() {
   const { user, setLearningMode, logout } = useAuthStore();
+  const t = useT();
   const mode = (user?.settings?.learningMode ?? "BOTH") as "KR" | "JP" | "BOTH";
   const [notifications, setNotifications] = useState(user?.settings?.notifications ?? true);
   const [saveMsg, setSaveMsg] = useState("");
@@ -19,9 +21,9 @@ export default function ProfilePage() {
     setLearningMode(newMode);
     try {
       await api.patch("/me/settings", { learningMode: newMode });
-      setSaveMsg("저장됐어요 ✓");
+      setSaveMsg(t("profile.saved"));
       setTimeout(() => setSaveMsg(""), 2000);
-    } catch { setSaveMsg("저장 실패"); }
+    } catch { setSaveMsg(t("profile.save_failed")); }
   }
 
   async function handleNotificationsToggle() {
@@ -40,7 +42,7 @@ export default function ProfilePage() {
     <div className="fade-up" style={{ padding: 32, maxWidth: 640, margin: "0 auto" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 32 }}>
         <Link href="/dashboard" style={{ fontSize: 13, color: "var(--text-muted)", textDecoration: "none" }}>
-          ← 대시보드
+          {t("common.back_dashboard")}
         </Link>
       </div>
 
@@ -68,7 +70,7 @@ export default function ProfilePage() {
             {user.email}
           </div>
           <div style={{ fontSize: 13, color: "var(--text-secondary)" }}>
-            모국어: {nativeLangLabel[user.nativeLanguage] ?? user.nativeLanguage}
+            {t("profile.native_lang", { lang: nativeLangLabel[user.nativeLanguage] ?? user.nativeLanguage })}
           </div>
         </div>
       </div>
@@ -77,9 +79,9 @@ export default function ProfilePage() {
       <div className="glass" style={{ padding: 24, marginBottom: 16 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
           <div>
-            <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)" }}>학습 언어</div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)" }}>{t("profile.learning_title")}</div>
             <div style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 2 }}>
-              학습할 언어를 선택하세요
+              {t("profile.learning_desc")}
             </div>
           </div>
           {saveMsg && <span style={{ fontSize: 12, color: "var(--accent-green)" }}>{saveMsg}</span>}
@@ -91,9 +93,9 @@ export default function ProfilePage() {
       <div className="glass" style={{ padding: 24, marginBottom: 16 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div>
-            <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)" }}>알림</div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)" }}>{t("profile.notifications")}</div>
             <div style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 2 }}>
-              학습 리마인더 알림
+              {t("profile.notifications_desc")}
             </div>
           </div>
           <button
@@ -128,7 +130,7 @@ export default function ProfilePage() {
 
       {/* Account actions */}
       <div className="glass" style={{ padding: 24 }}>
-        <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)", marginBottom: 16 }}>계정</div>
+        <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)", marginBottom: 16 }}>{t("profile.account")}</div>
         <button
           onClick={logout}
           style={{
@@ -144,7 +146,7 @@ export default function ProfilePage() {
             textAlign: "left",
           }}
         >
-          로그아웃
+          {t("profile.logout")}
         </button>
       </div>
     </div>

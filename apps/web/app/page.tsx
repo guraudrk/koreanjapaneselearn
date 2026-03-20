@@ -1,36 +1,19 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-
-const FEATURES = [
-  {
-    icon: "⚡",
-    title: "동시 학습",
-    desc: "한국어·일본어를 한 화면에서 비교하며 배웁니다. 공통 한자어를 한번에 익혀보세요.",
-    color: "var(--brand-both)",
-  },
-  {
-    icon: "🃏",
-    title: "비교 플래시카드",
-    desc: "앞면 영어, 뒷면 KR+JP 나란히. 공통점과 차이점이 한눈에.",
-    color: "var(--brand-kr)",
-  },
-  {
-    icon: "🤖",
-    title: "AI 번역 + 설명",
-    desc: "내 언어로 입력하면 문법·뉘앙스까지 설명해주는 AI. 무료 일일 제공.",
-    color: "var(--brand-jp)",
-  },
-  {
-    icon: "⭐",
-    title: "포인트 시스템",
-    desc: "학습할수록 포인트가 쌓입니다. 친구와 공유하고 랭킹을 겨뤄보세요.",
-    color: "var(--accent-gold)",
-  },
-];
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { useT } from "@/lib/i18n";
 
 export default function LandingPage() {
   const heroRef = useRef<HTMLDivElement>(null);
+  const t = useT();
+
+  const FEATURES = [
+    { icon: "⚡", titleKey: "landing.feat1_title" as const, descKey: "landing.feat1_desc" as const, color: "var(--brand-both)" },
+    { icon: "🃏", titleKey: "landing.feat2_title" as const, descKey: "landing.feat2_desc" as const, color: "var(--brand-kr)" },
+    { icon: "🤖", titleKey: "landing.feat3_title" as const, descKey: "landing.feat3_desc" as const, color: "var(--brand-jp)" },
+    { icon: "⭐", titleKey: "landing.feat4_title" as const, descKey: "landing.feat4_desc" as const, color: "var(--accent-gold)" },
+  ];
 
   useEffect(() => {
     const handler = () => {
@@ -61,15 +44,18 @@ export default function LandingPage() {
           borderBottom: "1px solid var(--glass-border)",
         }}
       >
-        <div style={{ fontSize: 20, fontWeight: 800 }}>
-          <span style={{ color: "var(--brand-kr)" }}>한</span>
-          <span style={{ color: "var(--text-muted)" }}> · </span>
-          <span style={{ color: "var(--brand-jp)" }}>日</span>
-          <span style={{ fontSize: 14, color: "var(--text-secondary)", marginLeft: 8, fontWeight: 500 }}>
-            LinguaBridge
-          </span>
-        </div>
-        <div style={{ display: "flex", gap: 12 }}>
+        <Link href="/" style={{ textDecoration: "none" }}>
+          <div style={{ fontSize: 20, fontWeight: 800 }}>
+            <span style={{ color: "var(--brand-kr)" }}>한</span>
+            <span style={{ color: "var(--text-muted)" }}> · </span>
+            <span style={{ color: "var(--brand-jp)" }}>日</span>
+            <span style={{ fontSize: 14, color: "var(--text-secondary)", marginLeft: 8, fontWeight: 500 }}>
+              LinguaBridge
+            </span>
+          </div>
+        </Link>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <LanguageSwitcher compact />
           <Link
             href="/login"
             style={{
@@ -81,7 +67,7 @@ export default function LandingPage() {
               fontSize: 14,
             }}
           >
-            로그인
+            {t("nav.login")}
           </Link>
           <Link
             href="/signup"
@@ -96,7 +82,7 @@ export default function LandingPage() {
               fontWeight: 600,
             }}
           >
-            무료 시작
+            {t("landing.cta_start")}
           </Link>
         </div>
       </nav>
@@ -145,7 +131,7 @@ export default function LandingPage() {
               letterSpacing: "0.06em",
             }}
           >
-            ✦ 세계 최초 KR+JP 동시 학습 플랫폼
+            {t("landing.badge")}
           </div>
           <h1
             style={{
@@ -155,11 +141,11 @@ export default function LandingPage() {
               marginBottom: 20,
             }}
           >
-            <span style={{ color: "var(--brand-kr)" }}>한국어</span>
-            {" "}와{" "}
-            <span style={{ color: "var(--brand-jp)" }}>일본어</span>
+            <span style={{ color: "var(--brand-kr)" }}>{t("landing.hero_title_1")}</span>
+            {" "}{t("landing.hero_title_and")}{" "}
+            <span style={{ color: "var(--brand-jp)" }}>{t("landing.hero_title_2")}</span>
             <br />
-            <span style={{ color: "var(--text-primary)" }}>동시에 정복하세요</span>
+            <span style={{ color: "var(--text-primary)" }}>{t("landing.hero_title_3")}</span>
           </h1>
           <p
             style={{
@@ -170,8 +156,7 @@ export default function LandingPage() {
               marginBottom: 40,
             }}
           >
-            두 언어의 공통점과 차이를 비교하며 배우는 스마트 학습.
-            비교 플래시카드, AI 번역 설명, 포인트 시스템으로 실력을 키우세요.
+            {t("landing.hero_desc")}
           </p>
           <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
             <Link
@@ -188,7 +173,7 @@ export default function LandingPage() {
                 boxShadow: "0 0 32px rgba(99,102,241,0.35)",
               }}
             >
-              무료로 시작하기 →
+              {t("landing.cta_start")}
             </Link>
             <Link
               href="/login"
@@ -202,7 +187,7 @@ export default function LandingPage() {
                 fontSize: 16,
               }}
             >
-              로그인
+              {t("landing.cta_login")}
             </Link>
           </div>
         </div>
@@ -211,20 +196,20 @@ export default function LandingPage() {
       {/* Features */}
       <section style={{ padding: "80px 32px", maxWidth: 1100, margin: "0 auto" }}>
         <h2 style={{ textAlign: "center", fontSize: 32, fontWeight: 700, marginBottom: 48 }}>
-          왜 LinguaBridge인가요?
+          {t("landing.why_title")}
         </h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 20 }}>
           {FEATURES.map((f) => (
             <div
-              key={f.title}
+              key={f.titleKey}
               className="glass"
               style={{ padding: 28, transition: "transform 200ms" }}
               onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.transform = "translateY(-4px)")}
               onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.transform = "translateY(0)")}
             >
               <div style={{ fontSize: 32, marginBottom: 12 }}>{f.icon}</div>
-              <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8, color: f.color }}>{f.title}</h3>
-              <p style={{ fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.7 }}>{f.desc}</p>
+              <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8, color: f.color }}>{t(f.titleKey)}</h3>
+              <p style={{ fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.7 }}>{t(f.descKey)}</p>
             </div>
           ))}
         </div>
@@ -241,8 +226,8 @@ export default function LandingPage() {
             background: "linear-gradient(135deg, rgba(99,102,241,0.1), rgba(255,77,109,0.06))",
           }}
         >
-          <h2 style={{ fontSize: 28, fontWeight: 700, marginBottom: 12 }}>지금 바로 시작하세요</h2>
-          <p style={{ fontSize: 15, color: "var(--text-secondary)", marginBottom: 28 }}>무료로 시작, 언제든 업그레이드</p>
+          <h2 style={{ fontSize: 28, fontWeight: 700, marginBottom: 12 }}>{t("landing.final_title")}</h2>
+          <p style={{ fontSize: 15, color: "var(--text-secondary)", marginBottom: 28 }}>{t("landing.final_desc")}</p>
           <Link
             href="/signup"
             className="btn-primary"
@@ -257,7 +242,7 @@ export default function LandingPage() {
               display: "inline-block",
             }}
           >
-            무료로 시작하기 →
+            {t("landing.cta_start")}
           </Link>
         </div>
       </section>

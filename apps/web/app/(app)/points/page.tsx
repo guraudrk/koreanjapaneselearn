@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import Link from "next/link";
+import { useT } from "@/lib/i18n";
 
 interface PointsBalance {
   total: number;
@@ -15,6 +16,7 @@ interface LeaderboardEntry {
 }
 
 export default function PointsPage() {
+  const t = useT();
   const [balance, setBalance] = useState<PointsBalance | null>(null);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,19 +29,19 @@ export default function PointsPage() {
   }, []);
 
   if (loading) {
-    return <div style={{ padding: 32, color: "var(--text-muted)" }}>불러오는 중...</div>;
+    return <div style={{ padding: 32, color: "var(--text-muted)" }}>{t("points.loading")}</div>;
   }
 
   return (
     <div className="fade-up" style={{ padding: 32, maxWidth: 720, margin: "0 auto" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 32 }}>
         <Link href="/dashboard" style={{ fontSize: 13, color: "var(--text-muted)", textDecoration: "none" }}>
-          ← 대시보드
+          {t("common.back_dashboard")}
         </Link>
       </div>
 
       <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 24, color: "var(--text-primary)" }}>
-        포인트 현황
+        {t("points.title")}
       </h1>
 
       {/* Balance Cards */}
@@ -58,7 +60,7 @@ export default function PointsPage() {
           <div style={{ fontSize: 52, fontWeight: 800, color: "var(--accent-gold)" }}>
             {balance?.total ?? 0}
           </div>
-          <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>누적 포인트</p>
+          <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>{t("points.total_label")}</p>
         </div>
 
         <div
@@ -75,22 +77,22 @@ export default function PointsPage() {
           <div style={{ fontSize: 52, fontWeight: 800, color: "var(--accent-green)" }}>
             +{balance?.todayEarned ?? 0}
           </div>
-          <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>오늘 획득</p>
+          <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>{t("points.today_label")}</p>
         </div>
       </div>
 
       {/* How to earn */}
       <div className="glass" style={{ padding: 24, marginBottom: 32 }}>
         <h2 style={{ fontSize: 15, fontWeight: 600, color: "var(--text-primary)", marginBottom: 16 }}>
-          포인트 적립 방법
+          {t("points.how_title")}
         </h2>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {[
-            { label: "정답 카드", points: "+10", color: "var(--accent-green)" },
-            { label: "레슨 완료 보너스", points: "+50", color: "var(--accent-gold)" },
+            { labelKey: "points.correct_card" as const, points: "+10", color: "var(--accent-green)" },
+            { labelKey: "points.lesson_bonus" as const, points: "+50", color: "var(--accent-gold)" },
           ].map((item) => (
             <div
-              key={item.label}
+              key={item.labelKey}
               style={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -99,7 +101,7 @@ export default function PointsPage() {
                 borderBottom: "1px solid var(--glass-border)",
               }}
             >
-              <span style={{ fontSize: 14, color: "var(--text-secondary)" }}>{item.label}</span>
+              <span style={{ fontSize: 14, color: "var(--text-secondary)" }}>{t(item.labelKey)}</span>
               <span style={{ fontSize: 16, fontWeight: 700, color: item.color }}>{item.points}</span>
             </div>
           ))}
@@ -109,11 +111,11 @@ export default function PointsPage() {
       {/* Leaderboard */}
       <div className="glass" style={{ padding: 24 }}>
         <h2 style={{ fontSize: 15, fontWeight: 600, color: "var(--text-primary)", marginBottom: 16 }}>
-          글로벌 리더보드
+          {t("points.leaderboard")}
         </h2>
         {leaderboard.length === 0 ? (
           <p style={{ fontSize: 14, color: "var(--text-muted)", textAlign: "center", padding: "24px 0" }}>
-            아직 데이터가 없어요. 학습을 시작해보세요!
+            {t("points.no_data")}
           </p>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>

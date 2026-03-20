@@ -38,10 +38,10 @@ export async function generateMetadata({ params }: { params: Promise<{ code: str
   if (!data) return { title: "LinguaBridge — Shared Lesson" };
   return {
     title: `${data.lesson.title} — LinguaBridge`,
-    description: `${data.lesson.cards.length}개 카드 · ${data.lesson.curriculum.title} · LinguaBridge에서 한국어 & 일본어를 배워보세요!`,
+    description: `${data.lesson.cards.length} cards · ${data.lesson.curriculum.title} · Learn Korean & Japanese on LinguaBridge!`,
     openGraph: {
       title: `${data.lesson.title} — LinguaBridge`,
-      description: `${data.lesson.cards.length}개 카드 · ${data.lesson.curriculum.title}`,
+      description: `${data.lesson.cards.length} cards · ${data.lesson.curriculum.title}`,
       siteName: "LinguaBridge",
     },
   };
@@ -66,8 +66,8 @@ export default async function SharePage({ params }: { params: Promise<{ code: st
       >
         <div style={{ textAlign: "center", padding: 32 }}>
           <div style={{ fontSize: 48, marginBottom: 16 }}>🔍</div>
-          <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>공유 링크를 찾을 수 없습니다</h1>
-          <p style={{ color: "rgba(241,245,249,0.5)", marginBottom: 24 }}>링크가 만료되었거나 잘못된 주소입니다.</p>
+          <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>Share link not found</h1>
+          <p style={{ color: "rgba(241,245,249,0.5)", marginBottom: 24 }}>The link has expired or is invalid.</p>
           <a
             href="/"
             style={{
@@ -79,7 +79,7 @@ export default async function SharePage({ params }: { params: Promise<{ code: st
               fontWeight: 600,
             }}
           >
-            LinguaBridge 시작하기
+            Get Started with LinguaBridge
           </a>
         </div>
       </div>
@@ -112,7 +112,7 @@ export default async function SharePage({ params }: { params: Promise<{ code: st
             {data.lesson.title}
           </h1>
           <p style={{ fontSize: 14, color: "rgba(241,245,249,0.5)" }}>
-            {data.lesson.curriculum.title} · {data.lesson.cards.length}개 카드
+            {data.lesson.curriculum.title} · {data.lesson.cards.length} cards
           </p>
         </div>
 
@@ -153,7 +153,7 @@ export default async function SharePage({ params }: { params: Promise<{ code: st
         {/* CTA */}
         <div style={{ textAlign: "center" }}>
           <p style={{ fontSize: 15, color: "rgba(241,245,249,0.6)", marginBottom: 16 }}>
-            한국어 & 일본어를 함께 배워보세요
+            Learn Korean & Japanese together
           </p>
           <a
             href="/signup"
@@ -168,7 +168,7 @@ export default async function SharePage({ params }: { params: Promise<{ code: st
               fontSize: 15,
             }}
           >
-            무료로 시작하기 →
+            Start for Free →
           </a>
         </div>
       </div>

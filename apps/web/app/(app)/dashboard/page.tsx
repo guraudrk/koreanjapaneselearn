@@ -4,6 +4,7 @@ import { useAuthStore } from "@/store/auth";
 import { api } from "@/lib/api";
 import { ModeSwitch } from "@/components/ui/ModeSwitch";
 import Link from "next/link";
+import { useT } from "@/lib/i18n";
 
 interface Curriculum {
   id: string;
@@ -28,6 +29,7 @@ interface LearningProgress {
 
 export default function DashboardPage() {
   const { user, setLearningMode } = useAuthStore();
+  const t = useT();
   const mode = (user?.settings?.learningMode ?? "BOTH") as "KR" | "JP" | "BOTH";
   const [curriculums, setCurriculums] = useState<Curriculum[]>([]);
   const [points, setPoints] = useState<PointsBalance>({ total: 0, todayEarned: 0 });
@@ -47,6 +49,7 @@ export default function DashboardPage() {
   }
 
   const modeColor = mode === "KR" ? "var(--brand-kr)" : mode === "JP" ? "var(--brand-jp)" : "var(--brand-both)";
+  const modeName = mode === "KR" ? t("common.lang_kr") : mode === "JP" ? t("common.lang_jp") : t("common.lang_both");
 
   return (
     <div className="fade-up" style={{ padding: 32, maxWidth: 1100 }}>
@@ -54,10 +57,10 @@ export default function DashboardPage() {
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 32, flexWrap: "wrap", gap: 16 }}>
         <div>
           <h1 style={{ fontSize: 28, fontWeight: 700, color: "var(--text-primary)", marginBottom: 4 }}>
-            안녕하세요, {user?.email?.split("@")[0]}님 👋
+            {t("dash.greeting", { name: user?.email?.split("@")[0] ?? "" })}
           </h1>
           <p style={{ fontSize: 15, color: "var(--text-secondary)" }}>
-            오늘도 한 걸음 더 나아가봐요!
+            {t("dash.subtitle")}
           </p>
         </div>
         <ModeSwitch value={mode} onChange={handleModeChange} />
@@ -85,7 +88,7 @@ export default function DashboardPage() {
             </div>
             <div style={{ fontSize: 22, marginBottom: 4 }}>{progress.streak > 0 ? "🔥" : "💤"}</div>
           </div>
-          <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>연속 학습일</p>
+          <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>{t("dash.streak_label")}</p>
         </div>
 
         {/* Points Card */}
@@ -96,8 +99,8 @@ export default function DashboardPage() {
             </p>
             <div style={{ fontSize: 52, fontWeight: 800, color: "var(--accent-gold)", lineHeight: 1 }}>{points.total}</div>
             <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>
-              누적 포인트{points.todayEarned > 0 && (
-                <span style={{ color: "var(--accent-green)", marginLeft: 8 }}>+{points.todayEarned} 오늘</span>
+              {t("dash.points_label")}{points.todayEarned > 0 && (
+                <span style={{ color: "var(--accent-green)", marginLeft: 8 }}>+{points.todayEarned} {t("dash.points_today")}</span>
               )}
             </p>
           </div>
@@ -109,16 +112,16 @@ export default function DashboardPage() {
             LEARNING MODE
           </p>
           <div style={{ fontSize: 28, fontWeight: 800, color: modeColor }}>
-            {mode === "KR" ? "한국어" : mode === "JP" ? "日本語" : "KR + JP"}
+            {modeName}
           </div>
-          <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>현재 학습 언어</p>
+          <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>{t("dash.mode_label")}</p>
         </div>
 
         {/* Stats row */}
         <div className="glass" style={{ gridColumn: "span 4", padding: 20 }}>
           <p style={{ fontSize: 12, color: "var(--text-muted)", letterSpacing: "0.08em", marginBottom: 10 }}>CARDS STUDIED</p>
           <div style={{ fontSize: 36, fontWeight: 800, color: "var(--text-primary)" }}>{progress.completedCards}</div>
-          <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>총 학습 카드</p>
+          <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>{t("dash.cards_label")}</p>
         </div>
 
         <div className="glass" style={{ gridColumn: "span 4", padding: 20 }}>
@@ -134,20 +137,20 @@ export default function DashboardPage() {
         <div className="glass" style={{ gridColumn: "span 4", padding: 20 }}>
           <p style={{ fontSize: 12, color: "var(--text-muted)", letterSpacing: "0.08em", marginBottom: 10 }}>CORRECT CARDS</p>
           <div style={{ fontSize: 36, fontWeight: 800, color: "var(--accent-green)" }}>{progress.correctCards}</div>
-          <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>정답 카드 수</p>
+          <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 4 }}>{t("dash.correct_label")}</p>
         </div>
 
         {/* Curriculum List */}
         <div className="glass" style={{ gridColumn: "span 8", padding: 28 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-            <h2 style={{ fontSize: 16, fontWeight: 600, color: "var(--text-primary)" }}>커리큘럼</h2>
+            <h2 style={{ fontSize: 16, fontWeight: 600, color: "var(--text-primary)" }}>{t("dash.curriculum_title")}</h2>
             <Link href="/learn" style={{ fontSize: 12, color: "var(--text-muted)", textDecoration: "none" }}>
-              전체 보기 →
+              {t("dash.view_all")}
             </Link>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {curriculums.length === 0 ? (
-              <p style={{ color: "var(--text-muted)", fontSize: 14 }}>커리큘럼을 불러오는 중...</p>
+              <p style={{ color: "var(--text-muted)", fontSize: 14 }}>{t("dash.loading_curriculum")}</p>
             ) : (
               curriculums.map((c) => {
                 const color = c.language === "KR" ? "var(--brand-kr)" : c.language === "JP" ? "var(--brand-jp)" : "var(--brand-both)";
@@ -174,7 +177,7 @@ export default function DashboardPage() {
                       <span style={{ fontSize: 12, color: "var(--text-muted)", marginLeft: 8 }}>{c.level}</span>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                      <span style={{ fontSize: 12, color }}>{c.lessonCount}개 레슨</span>
+                      <span style={{ fontSize: 12, color }}>{t("common.lessons", { n: c.lessonCount })}</span>
                       <span style={{ fontSize: 12, color: "var(--text-muted)" }}>→</span>
                     </div>
                   </Link>
@@ -195,11 +198,10 @@ export default function DashboardPage() {
           }}
         >
           <p style={{ fontSize: 12, color: "var(--accent-gold)", marginBottom: 8, letterSpacing: "0.08em" }}>
-            DID YOU KNOW?
+            {t("dash.tip_label")}
           </p>
           <p style={{ fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.7 }}>
-            한국어의 <strong style={{ color: "var(--brand-kr)" }}>준비</strong>(準備)와 일본어의{" "}
-            <strong style={{ color: "var(--brand-jp)" }}>じゅんび</strong>는 같은 한자어예요!
+            {t("dash.tip_text")}
           </p>
         </div>
 

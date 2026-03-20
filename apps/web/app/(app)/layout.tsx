@@ -3,10 +3,13 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuthStore } from "@/store/auth";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { useT } from "@/lib/i18n";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { user, logout } = useAuthStore();
+  const t = useT();
 
   useEffect(() => {
     if (!user) router.replace("/login");
@@ -29,23 +32,28 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           flexShrink: 0,
         }}
       >
-        {/* Logo */}
-        <div style={{ padding: "0 8px", marginBottom: 24 }}>
+        {/* Logo — links to home */}
+        <Link href="/" style={{ padding: "0 8px", marginBottom: 16, textDecoration: "none" }}>
           <div style={{ fontSize: 22, fontWeight: 800 }}>
             <span style={{ color: "var(--brand-kr)" }}>한</span>
             <span style={{ color: "var(--text-muted)" }}> · </span>
             <span style={{ color: "var(--brand-jp)" }}>日</span>
           </div>
           <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 2 }}>LinguaBridge</div>
+        </Link>
+
+        {/* Language switcher */}
+        <div style={{ padding: "0 4px", marginBottom: 8 }}>
+          <LanguageSwitcher compact />
         </div>
 
         {[
-          { href: "/dashboard", icon: "◈", label: "대시보드" },
-          { href: "/learn", icon: "▶", label: "학습" },
-          { href: "/dictionary", icon: "◉", label: "사전" },
-          { href: "/points", icon: "★", label: "포인트" },
-          { href: "/profile", icon: "⊙", label: "프로필" },
-        ].map(({ href, icon, label }) => (
+          { href: "/dashboard", icon: "◈", labelKey: "nav.dashboard" as const },
+          { href: "/learn", icon: "▶", labelKey: "nav.learn" as const },
+          { href: "/dictionary", icon: "◉", labelKey: "nav.dictionary" as const },
+          { href: "/points", icon: "★", labelKey: "nav.points" as const },
+          { href: "/profile", icon: "⊙", labelKey: "nav.profile" as const },
+        ].map(({ href, icon, labelKey }) => (
           <Link
             key={href}
             href={href}
@@ -70,7 +78,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             }}
           >
             <span>{icon}</span>
-            <span>{label}</span>
+            <span>{t(labelKey)}</span>
           </Link>
         ))}
 
@@ -92,7 +100,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               textAlign: "left",
             }}
           >
-            로그아웃
+            {t("nav.logout")}
           </button>
         </div>
       </aside>

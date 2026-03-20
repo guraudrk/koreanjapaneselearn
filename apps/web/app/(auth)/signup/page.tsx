@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuthStore } from "@/store/auth";
 import { api } from "@/lib/api";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { useT } from "@/lib/i18n";
 
 const LANGUAGES = [
   { code: "en", label: "English" },
@@ -17,6 +19,7 @@ const LANGUAGES = [
 export default function SignupPage() {
   const router = useRouter();
   const setAuth = useAuthStore((s) => s.setAuth);
+  const t = useT();
   const [form, setForm] = useState({ email: "", password: "", nativeLanguage: "en" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -35,7 +38,7 @@ export default function SignupPage() {
       router.push("/dashboard");
     } catch (err: unknown) {
       const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
-      setError(msg ?? "회원가입에 실패했습니다. 다시 시도해주세요.");
+      setError(msg ?? t("auth.signup.error"));
     } finally {
       setLoading(false);
     }
@@ -54,32 +57,39 @@ export default function SignupPage() {
       }}
     >
       <div style={{ width: "100%", maxWidth: 420 }}>
+        {/* Language switcher top-right */}
+        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
+          <LanguageSwitcher compact />
+        </div>
+
         {/* Logo */}
         <div style={{ textAlign: "center", marginBottom: 40 }}>
-          <div style={{ fontSize: 32, fontWeight: 800, marginBottom: 8 }}>
-            <span style={{ color: "var(--brand-kr)" }}>한</span>
-            <span style={{ color: "var(--text-primary)" }}> · </span>
-            <span style={{ color: "var(--brand-jp)" }}>日</span>
-          </div>
-          <h1 style={{ fontSize: 24, fontWeight: 700, color: "var(--text-primary)" }}>LinguaBridge</h1>
+          <Link href="/" style={{ textDecoration: "none" }}>
+            <div style={{ fontSize: 32, fontWeight: 800, marginBottom: 8 }}>
+              <span style={{ color: "var(--brand-kr)" }}>한</span>
+              <span style={{ color: "var(--text-primary)" }}> · </span>
+              <span style={{ color: "var(--brand-jp)" }}>日</span>
+            </div>
+            <h1 style={{ fontSize: 24, fontWeight: 700, color: "var(--text-primary)" }}>LinguaBridge</h1>
+          </Link>
           <p style={{ fontSize: 14, color: "var(--text-secondary)", marginTop: 6 }}>
-            지금 시작하면 두 언어가 기다립니다
+            {t("auth.signup.tagline")}
           </p>
         </div>
 
         <div className="glass" style={{ padding: 32 }}>
           <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 24, color: "var(--text-primary)" }}>
-            계정 만들기
+            {t("auth.signup.title")}
           </h2>
 
           <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {[
-              { key: "email", label: "이메일", type: "email", placeholder: "you@example.com" },
-              { key: "password", label: "비밀번호", type: "password", placeholder: "8자 이상" },
-            ].map(({ key, label, type, placeholder }) => (
+              { key: "email", labelKey: "auth.signup.email" as const, type: "email", placeholder: "you@example.com" },
+              { key: "password", labelKey: "auth.signup.password" as const, type: "password", placeholder: t("auth.signup.password_placeholder") },
+            ].map(({ key, labelKey, type, placeholder }) => (
               <div key={key}>
                 <label style={{ display: "block", fontSize: 13, color: "var(--text-secondary)", marginBottom: 6 }}>
-                  {label}
+                  {t(labelKey)}
                 </label>
                 <input
                   type={type}
@@ -106,7 +116,7 @@ export default function SignupPage() {
 
             <div>
               <label style={{ display: "block", fontSize: 13, color: "var(--text-secondary)", marginBottom: 6 }}>
-                모국어
+                {t("auth.signup.native_lang")}
               </label>
               <select
                 value={form.nativeLanguage}
@@ -154,14 +164,14 @@ export default function SignupPage() {
                 marginTop: 4,
               }}
             >
-              {loading ? "가입 중..." : "무료로 시작하기"}
+              {loading ? t("auth.signup.submitting") : t("auth.signup.submit")}
             </button>
           </form>
 
           <p style={{ textAlign: "center", marginTop: 20, fontSize: 13, color: "var(--text-secondary)" }}>
-            이미 계정이 있으신가요?{" "}
+            {t("auth.signup.has_account")}{" "}
             <Link href="/login" style={{ color: "var(--brand-both)", fontWeight: 500 }}>
-              로그인
+              {t("auth.signup.login_link")}
             </Link>
           </p>
         </div>

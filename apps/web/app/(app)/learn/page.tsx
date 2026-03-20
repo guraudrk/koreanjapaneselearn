@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import Link from "next/link";
+import { useT } from "@/lib/i18n";
 
 interface Curriculum {
   id: string;
@@ -15,6 +16,7 @@ interface Curriculum {
 export default function LearnPage() {
   const [curriculums, setCurriculums] = useState<Curriculum[]>([]);
   const [loading, setLoading] = useState(true);
+  const t = useT();
 
   useEffect(() => {
     api.get("/curriculums")
@@ -26,14 +28,14 @@ export default function LearnPage() {
   return (
     <div className="fade-up" style={{ padding: 32, maxWidth: 700 }}>
       <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 8, color: "var(--text-primary)" }}>
-        학습 시작
+        {t("learn.title")}
       </h1>
       <p style={{ fontSize: 14, color: "var(--text-secondary)", marginBottom: 28 }}>
-        학습할 커리큘럼을 선택하세요
+        {t("learn.subtitle")}
       </p>
 
       {loading ? (
-        <div style={{ color: "var(--text-muted)", fontSize: 14 }}>불러오는 중...</div>
+        <div style={{ color: "var(--text-muted)", fontSize: 14 }}>{t("common.loading")}</div>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           {curriculums.map((c) => {
@@ -42,9 +44,9 @@ export default function LearnPage() {
               c.language === "JP" ? "var(--brand-jp)" :
               "var(--brand-both)";
             const langLabel =
-              c.language === "KR" ? "한국어" :
-              c.language === "JP" ? "日本語" :
-              "KR + JP";
+              c.language === "KR" ? t("common.lang_kr") :
+              c.language === "JP" ? t("common.lang_jp") :
+              t("common.lang_both");
             return (
               <Link
                 key={c.id}
@@ -101,7 +103,7 @@ export default function LearnPage() {
                 </div>
 
                 <div style={{ textAlign: "right", flexShrink: 0 }}>
-                  <div style={{ fontSize: 12, color, fontWeight: 600 }}>{c.lessonCount}개 레슨</div>
+                  <div style={{ fontSize: 12, color, fontWeight: 600 }}>{t("common.lessons", { n: c.lessonCount })}</div>
                   <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2 }}>{c.level}</div>
                 </div>
 

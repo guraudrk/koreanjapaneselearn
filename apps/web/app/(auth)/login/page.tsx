@@ -4,10 +4,13 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuthStore } from "@/store/auth";
 import { api } from "@/lib/api";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { useT } from "@/lib/i18n";
 
 export default function LoginPage() {
   const router = useRouter();
   const setAuth = useAuthStore((s) => s.setAuth);
+  const t = useT();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,7 +26,7 @@ export default function LoginPage() {
       router.push("/dashboard");
     } catch (err: unknown) {
       const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
-      setError(msg ?? "로그인에 실패했습니다. 다시 시도해주세요.");
+      setError(msg ?? t("auth.login.error"));
     } finally {
       setLoading(false);
     }
@@ -42,31 +45,38 @@ export default function LoginPage() {
       }}
     >
       <div style={{ width: "100%", maxWidth: 420 }}>
+        {/* Language switcher top-right */}
+        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
+          <LanguageSwitcher compact />
+        </div>
+
         {/* Logo */}
         <div style={{ textAlign: "center", marginBottom: 40 }}>
-          <div style={{ fontSize: 32, fontWeight: 800, marginBottom: 8 }}>
-            <span style={{ color: "var(--brand-kr)" }}>한</span>
-            <span style={{ color: "var(--text-primary)" }}> · </span>
-            <span style={{ color: "var(--brand-jp)" }}>日</span>
-          </div>
-          <h1 style={{ fontSize: 24, fontWeight: 700, color: "var(--text-primary)" }}>
-            LinguaBridge
-          </h1>
+          <Link href="/" style={{ textDecoration: "none" }}>
+            <div style={{ fontSize: 32, fontWeight: 800, marginBottom: 8 }}>
+              <span style={{ color: "var(--brand-kr)" }}>한</span>
+              <span style={{ color: "var(--text-primary)" }}> · </span>
+              <span style={{ color: "var(--brand-jp)" }}>日</span>
+            </div>
+            <h1 style={{ fontSize: 24, fontWeight: 700, color: "var(--text-primary)" }}>
+              LinguaBridge
+            </h1>
+          </Link>
           <p style={{ fontSize: 14, color: "var(--text-secondary)", marginTop: 6 }}>
-            한국어와 일본어, 동시에 정복하세요
+            {t("auth.login.tagline")}
           </p>
         </div>
 
         {/* Card */}
         <div className="glass" style={{ padding: 32 }}>
           <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 24, color: "var(--text-primary)" }}>
-            로그인
+            {t("auth.login.title")}
           </h2>
 
           <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <div>
               <label style={{ display: "block", fontSize: 13, color: "var(--text-secondary)", marginBottom: 6 }}>
-                이메일
+                {t("auth.login.email")}
               </label>
               <input
                 type="email"
@@ -92,7 +102,7 @@ export default function LoginPage() {
 
             <div>
               <label style={{ display: "block", fontSize: 13, color: "var(--text-secondary)", marginBottom: 6 }}>
-                비밀번호
+                {t("auth.login.password")}
               </label>
               <input
                 type="password"
@@ -140,14 +150,14 @@ export default function LoginPage() {
                 marginTop: 4,
               }}
             >
-              {loading ? "로그인 중..." : "로그인"}
+              {loading ? t("auth.login.submitting") : t("auth.login.submit")}
             </button>
           </form>
 
           <p style={{ textAlign: "center", marginTop: 20, fontSize: 13, color: "var(--text-secondary)" }}>
-            계정이 없으신가요?{" "}
+            {t("auth.login.no_account")}{" "}
             <Link href="/signup" style={{ color: "var(--brand-both)", fontWeight: 500 }}>
-              회원가입
+              {t("auth.login.signup_link")}
             </Link>
           </p>
         </div>

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { api } from "@/lib/api";
+import { useT } from "@/lib/i18n";
 
 interface Lesson {
   id: string;
@@ -16,6 +17,7 @@ export default function CurriculumPage() {
   const { curriculumId } = useParams<{ curriculumId: string }>();
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
+  const t = useT();
 
   useEffect(() => {
     api.get(`/curriculums/${curriculumId}/lessons`)
@@ -27,16 +29,16 @@ export default function CurriculumPage() {
   return (
     <div className="fade-up" style={{ padding: 32, maxWidth: 700 }}>
       <Link href="/dashboard" style={{ fontSize: 13, color: "var(--text-muted)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4, marginBottom: 24 }}>
-        ← 대시보드로
+        {t("curriculum.back")}
       </Link>
 
-      <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 8 }}>레슨 목록</h1>
+      <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 8 }}>{t("curriculum.title")}</h1>
       <p style={{ fontSize: 14, color: "var(--text-secondary)", marginBottom: 28 }}>
-        학습할 레슨을 선택하세요
+        {t("curriculum.subtitle")}
       </p>
 
       {loading ? (
-        <div style={{ color: "var(--text-muted)", fontSize: 14 }}>불러오는 중...</div>
+        <div style={{ color: "var(--text-muted)", fontSize: 14 }}>{t("common.loading")}</div>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {lessons.map((lesson, idx) => (
@@ -87,7 +89,7 @@ export default function CurriculumPage() {
                 )}
               </div>
               <div style={{ fontSize: 12, color: "var(--text-muted)" }}>
-                카드 {lesson._count?.cards ?? 0}개 →
+                {t("curriculum.card_count", { n: lesson._count?.cards ?? 0 })}
               </div>
             </Link>
           ))}

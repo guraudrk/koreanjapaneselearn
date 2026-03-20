@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { api } from "@/lib/api";
+import { useT } from "@/lib/i18n";
 
 interface DictionaryEntry {
   id: string;
@@ -20,6 +21,7 @@ interface AiResult {
 }
 
 export default function DictionaryPage() {
+  const t = useT();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<DictionaryEntry[]>([]);
   const [loading, setLoading] = useState(false);
@@ -49,16 +51,14 @@ export default function DictionaryPage() {
       setAiResult((prev) => ({ ...prev, [entryId]: data }));
     } catch (err: unknown) {
       const status = (err as { response?: { status?: number } })?.response?.status;
-      if (status === 429) {
-        setAiResult((prev) => ({
-          ...prev,
-          [entryId]: {
-            translations: {},
-            explanation: "오늘 AI 설명 한도(20회)를 모두 사용했어요. 내일 다시 시도해보세요!",
-            usage: { usedToday: 20, remainingToday: 0 },
-          },
-        }));
-      }
+      setAiResult((prev) => ({
+        ...prev,
+        [entryId]: {
+          translations: {},
+          explanation: status === 429 ? t("common.ai_limit") : t("common.ai_error"),
+          usage: { usedToday: 20, remainingToday: 0 },
+        },
+      }));
     } finally {
       setAiLoading((prev) => ({ ...prev, [entryId]: false }));
     }
@@ -68,9 +68,9 @@ export default function DictionaryPage() {
     <div className="fade-up" style={{ padding: 32, maxWidth: 800 }}>
       {/* Header */}
       <div style={{ marginBottom: 32 }}>
-        <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 6 }}>사전 검색</h1>
+        <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 6 }}>{t("dict.title")}</h1>
         <p style={{ fontSize: 14, color: "var(--text-secondary)" }}>
-          영어·한국어·일본어로 검색하면 세 언어 뜻을 동시에 확인할 수 있어요
+          {t("dict.subtitle")}
         </p>
       </div>
 
@@ -80,7 +80,7 @@ export default function DictionaryPage() {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="단어를 입력하세요 (예: water, 사랑, 山)"
+          placeholder={t("dict.placeholder")}
           style={{
             flex: 1,
             background: "var(--glass-bg)",
@@ -111,38 +111,32 @@ export default function DictionaryPage() {
             whiteSpace: "nowrap",
           }}
         >
-          {loading ? "검색 중..." : "검색"}
+          {loading ? t("dict.searching") : t("dict.search")}
         </button>
       </form>
 
       {/* Results */}
       {!searched && (
-        <div
-          className="glass"
-          style={{ padding: 32, textAlign: "center", color: "var(--text-muted)" }}
-        >
+        <div className="glass" style={{ padding: 32, textAlign: "center", color: "var(--text-muted)" }}>
           <div style={{ fontSize: 40, marginBottom: 12 }}>🔍</div>
-          <p style={{ fontSize: 14 }}>위에서 단어를 검색해보세요</p>
+          <p style={{ fontSize: 14 }}>{t("dict.empty_hint")}</p>
         </div>
       )}
 
       {searched && !loading && results.length === 0 && (
-        <div
-          className="glass"
-          style={{ padding: 32, textAlign: "center", color: "var(--text-muted)" }}
-        >
+        <div className="glass" style={{ padding: 32, textAlign: "center", color: "var(--text-muted)" }}>
           <div style={{ fontSize: 40, marginBottom: 12 }}>😢</div>
           <p style={{ fontSize: 14 }}>
-            &apos;<strong style={{ color: "var(--text-secondary)" }}>{query}</strong>&apos; 에 대한 결과가 없습니다
+            {t("dict.no_results", { q: query })}
           </p>
-          <p style={{ fontSize: 12, marginTop: 6 }}>다른 단어로 시도해보세요</p>
+          <p style={{ fontSize: 12, marginTop: 6 }}>{t("dict.no_results_hint")}</p>
         </div>
       )}
 
       {results.length > 0 && (
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           <p style={{ fontSize: 13, color: "var(--text-muted)" }}>
-            {results.length}개 결과
+            {t("dict.result_count", { n: results.length })}
           </p>
           {results.map((entry) => (
             <div
@@ -187,7 +181,7 @@ export default function DictionaryPage() {
                   }}
                 >
                   <div style={{ fontSize: 11, color: "var(--brand-kr)", fontWeight: 600, marginBottom: 6, letterSpacing: "0.06em" }}>
-                    한국어
+                    {t("common.lang_kr")}
                   </div>
                   <div style={{ fontSize: 22, fontWeight: 700, color: "var(--text-primary)" }}>{entry.ko}</div>
                   {entry.koReading && (
@@ -204,7 +198,7 @@ export default function DictionaryPage() {
                   }}
                 >
                   <div style={{ fontSize: 11, color: "var(--brand-jp)", fontWeight: 600, marginBottom: 6, letterSpacing: "0.06em" }}>
-                    日本語
+                    {t("common.lang_jp")}
                   </div>
                   <div style={{ fontSize: 22, fontWeight: 700, color: "var(--text-primary)" }}>{entry.ja}</div>
                   {entry.jaReading && (
@@ -216,7 +210,7 @@ export default function DictionaryPage() {
               {/* Examples */}
               {entry.examples && Array.isArray(entry.examples) && entry.examples.length > 0 && (
                 <div style={{ marginTop: 14, paddingTop: 14, borderTop: "1px solid var(--glass-border)" }}>
-                  <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 8 }}>예문</p>
+                  <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 8 }}>{t("dict.examples")}</p>
                   {(entry.examples as { en: string; ko: string; ja: string }[]).map((ex, i) => (
                     <div key={i} style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.8 }}>
                       <span style={{ color: "var(--text-muted)" }}>EN </span>{ex.en} ·{" "}
@@ -227,7 +221,7 @@ export default function DictionaryPage() {
                 </div>
               )}
 
-              {/* AI 설명 */}
+              {/* AI Explain */}
               <div style={{ marginTop: 14, paddingTop: 14, borderTop: "1px solid var(--glass-border)" }}>
                 <button
                   onClick={() => handleAiExplain(entry.id, entry.en, "en", ["ko", "ja"])}
@@ -243,19 +237,16 @@ export default function DictionaryPage() {
                     fontWeight: 600,
                   }}
                 >
-                  {aiLoading[entry.id] ? "AI 분석 중..." : "✨ AI 설명"}
+                  {aiLoading[entry.id] ? t("common.ai_analyzing") : t("common.ai_explain")}
                 </button>
 
                 {aiResult[entry.id] && (
-                  <div
-                    className="glass"
-                    style={{ marginTop: 10, padding: 14, background: "rgba(99,102,241,0.05)" }}
-                  >
+                  <div className="glass" style={{ marginTop: 10, padding: 14, background: "rgba(99,102,241,0.05)" }}>
                     <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.7, margin: 0 }}>
                       {aiResult[entry.id]!.explanation}
                     </p>
                     <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 8, marginBottom: 0 }}>
-                      오늘 남은 횟수: {aiResult[entry.id]!.usage.remainingToday}회
+                      {t("common.ai_remaining", { n: aiResult[entry.id]!.usage.remainingToday })}
                     </p>
                   </div>
                 )}
