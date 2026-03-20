@@ -75,3 +75,19 @@
 
 - `9c23ca9` feat: i18n 다국어 지원 — EN/KO/JA 언어 전환 + 로고 홈 링크
 - `318fa66` feat: 언어 스위처 우측 상단 고정
+- `a84b4a7` fix: Zustand locale hydration 이슈 수정 — skipHydration + LocaleProvider
+
+### 5. Hydration 이슈 수정 (최종)
+
+**문제**: Zustand persist가 SSR/클라이언트 간 locale 불일치를 일으켜 텍스트가 제대로 바뀌지 않음
+
+**해결**:
+- `locale.ts`: `skipHydration: true` 추가 → 서버 렌더 시 자동 hydration 차단
+- `LocaleProvider.tsx` 신규 생성 → `useEffect`에서 `rehydrate()` 호출 (클라이언트 마운트 후)
+- `layout.tsx` (루트): `<LocaleProvider>`로 전체 앱 래핑
+
+**동작 방식**:
+- 첫 렌더: 항상 **영어(EN)** (기본값)
+- 마운트 후: localStorage에 저장된 언어가 있으면 자동 전환 (재방문 사용자 편의)
+
+**배포**: Vercel production → https://web-plum-kappa.vercel.app
