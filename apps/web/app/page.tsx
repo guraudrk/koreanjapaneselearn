@@ -55,7 +55,6 @@ export default function LandingPage() {
           </div>
         </Link>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <LanguageSwitcher compact />
           <Link
             href="/login"
             style={{
@@ -84,6 +83,7 @@ export default function LandingPage() {
           >
             {t("landing.cta_start")}
           </Link>
+          <LanguageSwitcher compact />
         </div>
       </nav>
 

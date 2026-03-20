@@ -57,8 +57,8 @@ export default function SignupPage() {
       }}
     >
       <div style={{ width: "100%", maxWidth: 420 }}>
-        {/* Language switcher top-right */}
-        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
+        {/* Language switcher — fixed top right */}
+        <div style={{ position: "fixed", top: 16, right: 20, zIndex: 100 }}>
           <LanguageSwitcher compact />
         </div>
 

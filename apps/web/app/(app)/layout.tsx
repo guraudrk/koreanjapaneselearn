@@ -18,97 +18,119 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   if (!user) return null;
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
-      {/* Sidebar */}
-      <aside
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+      {/* Top header — language switcher pinned to top right */}
+      <header
         style={{
-          width: 220,
-          background: "var(--bg-surface)",
-          borderRight: "1px solid var(--glass-border)",
+          position: "fixed",
+          top: 0,
+          left: 220,
+          right: 0,
+          height: 48,
+          zIndex: 50,
           display: "flex",
-          flexDirection: "column",
-          padding: "24px 16px",
-          gap: 8,
-          flexShrink: 0,
+          alignItems: "center",
+          justifyContent: "flex-end",
+          padding: "0 24px",
+          background: "rgba(13,13,26,0.8)",
+          backdropFilter: "blur(12px)",
+          borderBottom: "1px solid var(--glass-border)",
         }}
       >
-        {/* Logo — links to home */}
-        <Link href="/" style={{ padding: "0 8px", marginBottom: 16, textDecoration: "none" }}>
-          <div style={{ fontSize: 22, fontWeight: 800 }}>
-            <span style={{ color: "var(--brand-kr)" }}>한</span>
-            <span style={{ color: "var(--text-muted)" }}> · </span>
-            <span style={{ color: "var(--brand-jp)" }}>日</span>
-          </div>
-          <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 2 }}>LinguaBridge</div>
-        </Link>
+        <LanguageSwitcher compact />
+      </header>
 
-        {/* Language switcher */}
-        <div style={{ padding: "0 4px", marginBottom: 8 }}>
-          <LanguageSwitcher compact />
-        </div>
-
-        {[
-          { href: "/dashboard", icon: "◈", labelKey: "nav.dashboard" as const },
-          { href: "/learn", icon: "▶", labelKey: "nav.learn" as const },
-          { href: "/dictionary", icon: "◉", labelKey: "nav.dictionary" as const },
-          { href: "/points", icon: "★", labelKey: "nav.points" as const },
-          { href: "/profile", icon: "⊙", labelKey: "nav.profile" as const },
-        ].map(({ href, icon, labelKey }) => (
-          <Link
-            key={href}
-            href={href}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              padding: "10px 12px",
-              borderRadius: 10,
-              textDecoration: "none",
-              color: "var(--text-secondary)",
-              fontSize: 14,
-              transition: "background 150ms, color 150ms",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background = "var(--glass-bg)";
-              (e.currentTarget as HTMLElement).style.color = "var(--text-primary)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background = "transparent";
-              (e.currentTarget as HTMLElement).style.color = "var(--text-secondary)";
-            }}
-          >
-            <span>{icon}</span>
-            <span>{t(labelKey)}</span>
+      <div style={{ display: "flex", flex: 1 }}>
+        {/* Sidebar */}
+        <aside
+          style={{
+            width: 220,
+            position: "fixed",
+            top: 0,
+            left: 0,
+            bottom: 0,
+            background: "var(--bg-surface)",
+            borderRight: "1px solid var(--glass-border)",
+            display: "flex",
+            flexDirection: "column",
+            padding: "24px 16px",
+            gap: 8,
+            zIndex: 60,
+          }}
+        >
+          {/* Logo — links to home */}
+          <Link href="/" style={{ padding: "0 8px", marginBottom: 24, textDecoration: "none" }}>
+            <div style={{ fontSize: 22, fontWeight: 800 }}>
+              <span style={{ color: "var(--brand-kr)" }}>한</span>
+              <span style={{ color: "var(--text-muted)" }}> · </span>
+              <span style={{ color: "var(--brand-jp)" }}>日</span>
+            </div>
+            <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 2 }}>LinguaBridge</div>
           </Link>
-        ))}
 
-        <div style={{ marginTop: "auto", paddingTop: 8, borderTop: "1px solid var(--glass-border)" }}>
-          <div style={{ fontSize: 12, color: "var(--text-muted)", padding: "0 8px 8px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-            {user?.email}
+          {[
+            { href: "/dashboard", icon: "◈", labelKey: "nav.dashboard" as const },
+            { href: "/learn", icon: "▶", labelKey: "nav.learn" as const },
+            { href: "/dictionary", icon: "◉", labelKey: "nav.dictionary" as const },
+            { href: "/points", icon: "★", labelKey: "nav.points" as const },
+            { href: "/profile", icon: "⊙", labelKey: "nav.profile" as const },
+          ].map(({ href, icon, labelKey }) => (
+            <Link
+              key={href}
+              href={href}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                padding: "10px 12px",
+                borderRadius: 10,
+                textDecoration: "none",
+                color: "var(--text-secondary)",
+                fontSize: 14,
+                transition: "background 150ms, color 150ms",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "var(--glass-bg)";
+                (e.currentTarget as HTMLElement).style.color = "var(--text-primary)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "transparent";
+                (e.currentTarget as HTMLElement).style.color = "var(--text-secondary)";
+              }}
+            >
+              <span>{icon}</span>
+              <span>{t(labelKey)}</span>
+            </Link>
+          ))}
+
+          <div style={{ marginTop: "auto", paddingTop: 8, borderTop: "1px solid var(--glass-border)" }}>
+            <div style={{ fontSize: 12, color: "var(--text-muted)", padding: "0 8px 8px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              {user?.email}
+            </div>
+            <button
+              onClick={logout}
+              style={{
+                width: "100%",
+                padding: "8px 12px",
+                borderRadius: 10,
+                border: "none",
+                background: "transparent",
+                color: "var(--text-muted)",
+                fontSize: 13,
+                cursor: "pointer",
+                textAlign: "left",
+              }}
+            >
+              {t("nav.logout")}
+            </button>
           </div>
-          <button
-            onClick={logout}
-            style={{
-              width: "100%",
-              padding: "8px 12px",
-              borderRadius: 10,
-              border: "none",
-              background: "transparent",
-              color: "var(--text-muted)",
-              fontSize: 13,
-              cursor: "pointer",
-              textAlign: "left",
-            }}
-          >
-            {t("nav.logout")}
-          </button>
-        </div>
-      </aside>
+        </aside>
 
-      {/* Main */}
-      <main style={{ flex: 1, overflow: "auto" }}>
-        {children}
-      </main>
+        {/* Main content — offset for sidebar + header */}
+        <main style={{ flex: 1, marginLeft: 220, marginTop: 48, overflow: "auto", minHeight: "calc(100vh - 48px)" }}>
+          {children}
+        </main>
+      </div>
     </div>
   );
 }
