@@ -14,6 +14,9 @@ export const useLocaleStore = create<LocaleState>()(
       locale: "en",
       setLocale: (locale) => set({ locale }),
     }),
-    { name: "lingua-locale" }
+    {
+      name: "lingua-locale",
+      skipHydration: true, // prevent SSR/client hydration mismatch
+    }
   )
 );
