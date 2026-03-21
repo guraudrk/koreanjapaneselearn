@@ -1,11 +1,7 @@
 import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
-import { Request } from 'express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PointsService } from './points.service';
-
-interface AuthRequest extends Request {
-  user: { id: string };
-}
+import type { AuthRequest } from '../../interfaces/auth-request.interface';
 
 @UseGuards(JwtAuthGuard)
 @Controller('points')

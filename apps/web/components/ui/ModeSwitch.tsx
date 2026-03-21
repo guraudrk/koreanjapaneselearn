@@ -1,17 +1,18 @@
 "use client";
+import { useT } from "@/lib/i18n";
 
 interface ModeSwitchProps {
   value: "KR" | "JP" | "BOTH";
   onChange: (mode: "KR" | "JP" | "BOTH") => void;
 }
 
-const modes: { label: string; value: "KR" | "JP" | "BOTH"; color: string }[] = [
-  { label: "한국어", value: "KR", color: "var(--brand-kr)" },
-  { label: "동시학습", value: "BOTH", color: "var(--brand-both)" },
-  { label: "日本語", value: "JP", color: "var(--brand-jp)" },
-];
-
 export function ModeSwitch({ value, onChange }: ModeSwitchProps) {
+  const t = useT();
+  const modes: { label: string; value: "KR" | "JP" | "BOTH"; color: string }[] = [
+    { label: t("common.lang_kr"), value: "KR", color: "var(--brand-kr)" },
+    { label: t("common.lang_both"), value: "BOTH", color: "var(--brand-both)" },
+    { label: t("common.lang_jp"), value: "JP", color: "var(--brand-jp)" },
+  ];
   return (
     <div
       style={{

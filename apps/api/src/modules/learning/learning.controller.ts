@@ -1,12 +1,8 @@
 import { Controller, Post, Get, Body, Req, UseGuards } from '@nestjs/common';
-import { Request } from 'express';
 import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { LearningService } from './learning.service';
-
-interface AuthRequest extends Request {
-  user: { id: string };
-}
+import type { AuthRequest } from '../../interfaces/auth-request.interface';
 
 class SubmitDto {
   @IsString()

@@ -10,12 +10,9 @@ import {
 import { AuthService } from './auth.service';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
+import { RefreshDto } from './dto/refresh.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { Request } from 'express';
-
-interface AuthRequest extends Request {
-  user: { id: string; email: string };
-}
+import type { AuthRequest } from '../../interfaces/auth-request.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -34,8 +31,8 @@ export class AuthController {
 
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
-  refresh(@Body() body: { userId: string; refreshToken: string }) {
-    return this.authService.refresh(body.userId, body.refreshToken);
+  refresh(@Body() dto: RefreshDto) {
+    return this.authService.refresh(dto.userId, dto.refreshToken);
   }
 
   @UseGuards(JwtAuthGuard)

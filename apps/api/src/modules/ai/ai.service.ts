@@ -45,10 +45,12 @@ export class AiService {
     });
 
     const raw = (message.content[0] as { type: string; text: string }).text;
-    const result = JSON.parse(raw) as {
-      translations: Record<string, string>;
-      explanation: string;
-    };
+    let result: { translations: Record<string, string>; explanation: string };
+    try {
+      result = JSON.parse(raw) as { translations: Record<string, string>; explanation: string };
+    } catch {
+      throw new HttpException('AI response parsing failed. Please try again.', HttpStatus.SERVICE_UNAVAILABLE);
+    }
 
     const updated = await this.prisma.aiUsage.update({
       where: { userId_date: { userId, date: today } },
