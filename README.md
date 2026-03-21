@@ -27,6 +27,8 @@
 - 사전 검색 (한/영/일 동시 검색)
 - 연속 학습일(Streak) 트래킹
 - **AI 번역·설명** — Claude Haiku 기반, 단어/문장 맥락 설명 (일일 20회 무료)
+- **AI 오늘의 Tip** — 대시보드에 매번 다른 한/일 언어학 지식을 AI가 생성
+- **다국어 UI** — EN / 한국어 / 日本語 실시간 전환 (Zustand persist, 기본값 영어)
 
 ## Getting Started
 
@@ -80,6 +82,7 @@ npm run dev          # http://localhost:3000
 | POST | /share | ✓ | 공유 링크 생성 |
 | GET | /share/:code | - | 공유 링크 조회 |
 | POST | /ai/translate-explain | ✓ | AI 번역·설명 (일일 20회) |
+| GET | /ai/tip?locale= | ✓ | AI 오늘의 언어학 Tip 생성 |
 
 ## Environment Variables
 
@@ -398,7 +401,7 @@ latencyMs 활용 가능성:
 
 ## Progress
 
-현재 진행률: **~95%**
+현재 진행률: **~97%**
 
 | Task | 내용 | 상태 |
 |------|------|------|
@@ -413,6 +416,8 @@ latencyMs 활용 가능성:
 | T-0020 | Railway + Vercel 배포 | ✅ |
 | T-0021 | 프로덕션 API 테스트 (15개 엔드포인트) | ✅ |
 | T-0022 ~ T-0023 | AI 번역·설명 기능 (Claude Haiku, Match Rate 96%) | ✅ |
+| T-0024 | i18n 다국어 지원 — EN/KO/JA 전환, 기본값 영어, Zustand hydration 수정 | ✅ |
+| T-0025 | AI 오늘의 Tip — 대시보드 DID YOU KNOW? AI 동적 생성 | ✅ |
 | — | railway-deploy: ANTHROPIC_API_KEY 추가 → AI 기능 활성화 | ⏳ |
 | — | user-profile 확장 (AI 사용량, 통계, 비밀번호 변경) | 📋 |
 | — | subscription 유료 티어 (Stripe) | 📋 |

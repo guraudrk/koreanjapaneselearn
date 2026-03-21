@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Body, Req, Query, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AiService } from './ai.service';
@@ -16,5 +16,10 @@ export class AiController {
   @Post('translate-explain')
   translate(@Req() req: AuthRequest, @Body() dto: TranslateDto) {
     return this.aiService.translateExplain(req.user.id, dto);
+  }
+
+  @Get('tip')
+  tip(@Query('locale') locale: string) {
+    return this.aiService.generateTip(locale || 'en');
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/auth";
+import { useLocaleStore } from "@/store/locale";
 import { api } from "@/lib/api";
 import { ModeSwitch } from "@/components/ui/ModeSwitch";
 import Link from "next/link";
@@ -29,17 +30,29 @@ interface LearningProgress {
 
 export default function DashboardPage() {
   const { user, setLearningMode } = useAuthStore();
+  const { locale } = useLocaleStore();
   const t = useT();
   const mode = (user?.settings?.learningMode ?? "BOTH") as "KR" | "JP" | "BOTH";
   const [curriculums, setCurriculums] = useState<Curriculum[]>([]);
   const [points, setPoints] = useState<PointsBalance>({ total: 0, todayEarned: 0 });
   const [progress, setProgress] = useState<LearningProgress>({ completedCards: 0, correctCards: 0, correctRate: 0, totalPoints: 0, streak: 0 });
+  const [tip, setTip] = useState<string | null>(null);
+  const [tipLoading, setTipLoading] = useState(true);
 
   useEffect(() => {
     api.get("/curriculums").then((r) => setCurriculums(r.data)).catch(() => {});
     api.get("/points/balance").then((r) => setPoints(r.data)).catch(() => {});
     api.get("/learning/progress").then((r) => setProgress(r.data)).catch(() => {});
   }, []);
+
+  useEffect(() => {
+    setTipLoading(true);
+    setTip(null);
+    api.get(`/ai/tip?locale=${locale}`)
+      .then((r) => setTip(r.data.tip))
+      .catch(() => setTip(null))
+      .finally(() => setTipLoading(false));
+  }, [locale]);
 
   async function handleModeChange(newMode: "KR" | "JP" | "BOTH") {
     setLearningMode(newMode);
@@ -187,7 +200,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Tip Card */}
+        {/* Tip Card — AI generated */}
         <div
           className="glass"
           style={{
@@ -197,12 +210,47 @@ export default function DashboardPage() {
             borderColor: "rgba(245,158,11,0.2)",
           }}
         >
-          <p style={{ fontSize: 12, color: "var(--accent-gold)", marginBottom: 8, letterSpacing: "0.08em" }}>
-            {t("dash.tip_label")}
-          </p>
-          <p style={{ fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.7 }}>
-            {t("dash.tip_text")}
-          </p>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+            <p style={{ fontSize: 12, color: "var(--accent-gold)", letterSpacing: "0.08em", margin: 0 }}>
+              {t("dash.tip_label")}
+            </p>
+            <button
+              onClick={() => {
+                setTipLoading(true);
+                setTip(null);
+                api.get(`/ai/tip?locale=${locale}`)
+                  .then((r) => setTip(r.data.tip))
+                  .catch(() => setTip(null))
+                  .finally(() => setTipLoading(false));
+              }}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontSize: 14,
+                color: "var(--text-muted)",
+                padding: "2px 4px",
+                borderRadius: 4,
+                lineHeight: 1,
+              }}
+              title="New tip"
+            >
+              ↺
+            </button>
+          </div>
+          {tipLoading ? (
+            <div style={{ display: "flex", gap: 4, alignItems: "center", marginTop: 8 }}>
+              <span style={{ fontSize: 12, color: "var(--text-muted)" }}>✨ AI generating...</span>
+            </div>
+          ) : tip ? (
+            <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.7, margin: 0 }}>
+              {tip}
+            </p>
+          ) : (
+            <p style={{ fontSize: 13, color: "var(--text-muted)", margin: 0 }}>
+              {t("dash.tip_text")}
+            </p>
+          )}
         </div>
 
       </div>
