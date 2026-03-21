@@ -6,6 +6,7 @@ import { api } from "@/lib/api";
 import { ModeSwitch } from "@/components/ui/ModeSwitch";
 import Link from "next/link";
 import { useT } from "@/lib/i18n";
+import { TIPS } from "@/lib/tips";
 
 interface Curriculum {
   id: string;
@@ -36,23 +37,13 @@ export default function DashboardPage() {
   const [curriculums, setCurriculums] = useState<Curriculum[]>([]);
   const [points, setPoints] = useState<PointsBalance>({ total: 0, todayEarned: 0 });
   const [progress, setProgress] = useState<LearningProgress>({ completedCards: 0, correctCards: 0, correctRate: 0, totalPoints: 0, streak: 0 });
-  const [tip, setTip] = useState<string | null>(null);
-  const [tipLoading, setTipLoading] = useState(true);
+  const [tipIndex, setTipIndex] = useState(() => Math.floor(Math.random() * TIPS.length));
 
   useEffect(() => {
     api.get("/curriculums").then((r) => setCurriculums(r.data)).catch(() => {});
     api.get("/points/balance").then((r) => setPoints(r.data)).catch(() => {});
     api.get("/learning/progress").then((r) => setProgress(r.data)).catch(() => {});
   }, []);
-
-  useEffect(() => {
-    setTipLoading(true);
-    setTip(null);
-    api.get(`/ai/tip?locale=${locale}`)
-      .then((r) => setTip(r.data.tip))
-      .catch(() => setTip(null))
-      .finally(() => setTipLoading(false));
-  }, [locale]);
 
   async function handleModeChange(newMode: "KR" | "JP" | "BOTH") {
     setLearningMode(newMode);
@@ -200,7 +191,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Tip Card — AI generated */}
+        {/* Tip Card — static tips */}
         <div
           className="glass"
           style={{
@@ -215,14 +206,7 @@ export default function DashboardPage() {
               {t("dash.tip_label")}
             </p>
             <button
-              onClick={() => {
-                setTipLoading(true);
-                setTip(null);
-                api.get(`/ai/tip?locale=${locale}`)
-                  .then((r) => setTip(r.data.tip))
-                  .catch(() => setTip(null))
-                  .finally(() => setTipLoading(false));
-              }}
+              onClick={() => setTipIndex(Math.floor(Math.random() * TIPS.length))}
               style={{
                 background: "none",
                 border: "none",
@@ -238,19 +222,9 @@ export default function DashboardPage() {
               ↺
             </button>
           </div>
-          {tipLoading ? (
-            <div style={{ display: "flex", gap: 4, alignItems: "center", marginTop: 8 }}>
-              <span style={{ fontSize: 12, color: "var(--text-muted)" }}>✨ AI generating...</span>
-            </div>
-          ) : tip ? (
-            <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.7, margin: 0 }}>
-              {tip}
-            </p>
-          ) : (
-            <p style={{ fontSize: 13, color: "var(--text-muted)", margin: 0 }}>
-              {t("dash.tip_text")}
-            </p>
-          )}
+          <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.7, margin: 0 }}>
+            {TIPS[tipIndex][locale as "en" | "ko" | "ja"] ?? TIPS[tipIndex].en}
+          </p>
         </div>
 
       </div>
