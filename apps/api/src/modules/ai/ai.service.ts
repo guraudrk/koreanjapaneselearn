@@ -38,11 +38,19 @@ export class AiService {
     }
 
     const prompt = this.buildPrompt(dto);
-    const message = await this.client.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 512,
-      messages: [{ role: 'user', content: prompt }],
-    });
+    let message: Awaited<ReturnType<typeof this.client.messages.create>>;
+    try {
+      message = await this.client.messages.create({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 512,
+        messages: [{ role: 'user', content: prompt }],
+      });
+    } catch {
+      throw new HttpException(
+        'AI translation service is temporarily unavailable. Please try again later.',
+        HttpStatus.SERVICE_UNAVAILABLE,
+      );
+    }
 
     const raw = (message.content[0] as { type: string; text: string }).text;
     let result: { translations: Record<string, string>; explanation: string };
