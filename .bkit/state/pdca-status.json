@@ -1,7 +1,15 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-03-18T14:57:26.223Z",
+  "lastUpdated": "2026-03-21T16:11:55.703Z",
   "archived": {
+    "prisma": {
+      "phase": "archived",
+      "matchRate": 100,
+      "iterationCount": 0,
+      "startedAt": "2026-03-01T00:00:00.000Z",
+      "archivedAt": "2026-03-23T00:00:00.000Z",
+      "archivedTo": "docs/archive/2026-03/prisma/"
+    },
     "deployment": {
       "phase": "archived",
       "matchRate": 100,
@@ -12,7 +20,6 @@
     }
   },
   "activeFeatures": [
-    "prisma",
     "api",
     "users",
     "dto",
@@ -35,9 +42,12 @@
     "share",
     "[code]",
     "learn",
-    "profile"
+    "profile",
+    "ai",
+    "providers",
+    "interfaces"
   ],
-  "primaryFeature": "prisma",
+  "primaryFeature": null,
   "features": {
     "prisma": {
       "phase": "do",
@@ -61,9 +71,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-07T04:17:12.626Z",
-        "lastUpdated": "2026-03-12T14:33:34.994Z"
+        "lastUpdated": "2026-03-21T01:53:34.342Z"
       },
-      "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\main.ts"
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\app.module.ts"
     },
     "users": {
       "phase": "do",
@@ -74,7 +84,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-07T04:59:33.697Z",
-        "lastUpdated": "2026-03-12T14:49:03.686Z"
+        "lastUpdated": "2026-03-21T01:54:05.916Z"
       },
       "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\modules\\users\\users.controller.ts"
     },
@@ -87,9 +97,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-07T04:59:37.053Z",
-        "lastUpdated": "2026-03-18T14:57:02.701Z"
+        "lastUpdated": "2026-03-21T01:49:52.786Z"
       },
-      "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\modules\\users\\dto\\update-settings.dto.ts"
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\modules\\share\\dto\\create-share.dto.ts"
     },
     "strategies": {
       "phase": "do",
@@ -100,7 +110,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-07T04:59:40.624Z",
-        "lastUpdated": "2026-03-07T04:59:40.624Z"
+        "lastUpdated": "2026-03-21T01:49:38.153Z"
       },
       "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\modules\\auth\\strategies\\jwt.strategy.ts"
     },
@@ -126,9 +136,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-07T04:59:52.290Z",
-        "lastUpdated": "2026-03-07T04:59:59.385Z"
+        "lastUpdated": "2026-03-21T01:54:04.135Z"
       },
-      "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\modules\\auth\\auth.module.ts"
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\modules\\auth\\auth.controller.ts"
     },
     "curriculum": {
       "phase": "do",
@@ -152,9 +162,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-09T06:31:34.728Z",
-        "lastUpdated": "2026-03-12T14:49:29.830Z"
+        "lastUpdated": "2026-03-21T16:11:21.532Z"
       },
-      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\lib\\api.ts"
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\lib\\tips.ts"
     },
     "store": {
       "phase": "do",
@@ -165,9 +175,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-09T06:31:52.520Z",
-        "lastUpdated": "2026-03-12T14:49:19.096Z"
+        "lastUpdated": "2026-03-20T04:35:35.377Z"
       },
-      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\store\\auth.ts"
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\store\\locale.ts"
     },
     "ui": {
       "phase": "do",
@@ -178,9 +188,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-09T06:32:01.438Z",
-        "lastUpdated": "2026-03-11T14:24:47.574Z"
+        "lastUpdated": "2026-03-21T01:53:45.113Z"
       },
-      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\components\\ui\\FlipCard.tsx"
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\components\\ui\\ModeSwitch.tsx"
     },
     "login": {
       "phase": "do",
@@ -191,7 +201,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-09T06:32:31.661Z",
-        "lastUpdated": "2026-03-09T06:32:31.661Z"
+        "lastUpdated": "2026-03-20T04:19:18.067Z"
       },
       "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\(auth)\\login\\page.tsx"
     },
@@ -204,7 +214,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-09T06:32:46.025Z",
-        "lastUpdated": "2026-03-09T06:32:46.025Z"
+        "lastUpdated": "2026-03-20T04:19:22.615Z"
       },
       "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\(auth)\\signup\\page.tsx"
     },
@@ -217,9 +227,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-09T06:32:58.912Z",
-        "lastUpdated": "2026-03-12T14:39:46.572Z"
+        "lastUpdated": "2026-03-20T04:19:02.137Z"
       },
-      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\(app)\\loading.tsx"
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\(app)\\layout.tsx"
     },
     "dashboard": {
       "phase": "do",
@@ -230,7 +240,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-09T06:33:20.858Z",
-        "lastUpdated": "2026-03-12T14:35:32.822Z"
+        "lastUpdated": "2026-03-21T16:11:55.703Z"
       },
       "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\(app)\\dashboard\\page.tsx"
     },
@@ -243,7 +253,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-09T06:33:39.908Z",
-        "lastUpdated": "2026-03-09T06:33:39.908Z"
+        "lastUpdated": "2026-03-20T03:55:50.325Z"
       },
       "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\(app)\\learn\\[curriculumId]\\page.tsx"
     },
@@ -256,7 +266,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-09T06:33:56.565Z",
-        "lastUpdated": "2026-03-12T14:49:38.420Z"
+        "lastUpdated": "2026-03-20T03:56:35.325Z"
       },
       "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\(app)\\learn\\[curriculumId]\\[lessonId]\\page.tsx"
     },
@@ -269,7 +279,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-11T14:17:57.516Z",
-        "lastUpdated": "2026-03-11T14:18:38.555Z"
+        "lastUpdated": "2026-03-20T03:57:07.275Z"
       },
       "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\(app)\\dictionary\\page.tsx"
     },
@@ -282,7 +292,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-11T14:21:06.851Z",
-        "lastUpdated": "2026-03-18T14:57:26.223Z"
+        "lastUpdated": "2026-03-21T01:54:05.275Z"
       },
       "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\modules\\learning\\learning.controller.ts"
     },
@@ -295,9 +305,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-11T14:21:16.409Z",
-        "lastUpdated": "2026-03-11T14:25:42.485Z"
+        "lastUpdated": "2026-03-21T01:54:06.542Z"
       },
-      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\(app)\\points\\page.tsx"
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\modules\\points\\points.controller.ts"
     },
     "share": {
       "phase": "do",
@@ -308,7 +318,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-11T14:29:35.635Z",
-        "lastUpdated": "2026-03-12T14:33:16.535Z"
+        "lastUpdated": "2026-03-21T01:50:28.445Z"
       },
       "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\modules\\share\\share.controller.ts"
     },
@@ -321,7 +331,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-11T14:31:19.654Z",
-        "lastUpdated": "2026-03-11T14:31:19.654Z"
+        "lastUpdated": "2026-03-20T03:58:20.416Z"
       },
       "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\share\\[code]\\page.tsx"
     },
@@ -334,7 +344,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-12T14:33:52.338Z",
-        "lastUpdated": "2026-03-12T14:33:52.338Z"
+        "lastUpdated": "2026-03-20T03:55:37.065Z"
       },
       "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\(app)\\learn\\page.tsx"
     },
@@ -347,9 +357,48 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-12T14:36:07.440Z",
-        "lastUpdated": "2026-03-12T14:36:07.440Z"
+        "lastUpdated": "2026-03-20T03:57:49.026Z"
       },
       "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\app\\(app)\\profile\\page.tsx"
+    },
+    "ai": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-19T13:51:01.031Z",
+        "lastUpdated": "2026-03-21T01:54:03.018Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\modules\\ai\\ai.controller.ts"
+    },
+    "providers": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-20T04:35:41.042Z",
+        "lastUpdated": "2026-03-20T04:35:41.042Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\web\\components\\providers\\LocaleProvider.tsx"
+    },
+    "interfaces": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-21T01:49:51.143Z",
+        "lastUpdated": "2026-03-21T01:49:51.143Z"
+      },
+      "lastFile": "C:\\Users\\user\\antigravity\\apps\\api\\src\\interfaces\\auth-request.interface.ts"
     }
   },
   "pipeline": {
@@ -360,7 +409,7 @@
   "session": {
     "startedAt": "2026-03-06T09:14:05.333Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-03-18T14:57:26.223Z"
+    "lastActivity": "2026-03-21T16:11:55.703Z"
   },
   "history": [
     {
@@ -930,6 +979,438 @@
     {
       "timestamp": "2026-03-18T14:57:26.223Z",
       "feature": "learning",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-19T13:50:47.408Z",
+      "feature": "dto",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-19T13:51:01.031Z",
+      "feature": "ai",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-19T13:51:06.440Z",
+      "feature": "ai",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-19T13:51:09.930Z",
+      "feature": "ai",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-19T13:51:22.994Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-19T13:52:12.988Z",
+      "feature": "dictionary",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-19T13:52:24.030Z",
+      "feature": "[lessonId]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-19T13:52:27.759Z",
+      "feature": "[lessonId]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-19T13:52:38.301Z",
+      "feature": "[lessonId]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-19T13:52:49.034Z",
+      "feature": "[lessonId]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T03:48:54.800Z",
+      "feature": "store",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T03:49:12.825Z",
+      "feature": "ui",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T03:53:22.193Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T03:53:39.773Z",
+      "feature": "(app)",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T03:54:08.688Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T03:54:28.453Z",
+      "feature": "login",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T03:54:47.164Z",
+      "feature": "signup",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T03:55:21.889Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T03:55:37.065Z",
+      "feature": "learn",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T03:55:50.325Z",
+      "feature": "[curriculumId]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T03:56:35.325Z",
+      "feature": "[lessonId]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T03:57:07.275Z",
+      "feature": "dictionary",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T03:57:29.092Z",
+      "feature": "points",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T03:57:49.026Z",
+      "feature": "profile",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T03:58:00.956Z",
+      "feature": "[code]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T03:58:06.622Z",
+      "feature": "[code]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T03:58:13.866Z",
+      "feature": "[code]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T03:58:20.416Z",
+      "feature": "[code]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T04:19:02.137Z",
+      "feature": "(app)",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T04:19:12.057Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T04:19:18.067Z",
+      "feature": "login",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T04:19:22.615Z",
+      "feature": "signup",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T04:35:35.377Z",
+      "feature": "store",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T04:35:41.042Z",
+      "feature": "providers",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T04:35:45.282Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-20T04:35:48.759Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:36:53.651Z",
+      "feature": "ai",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:37:04.025Z",
+      "feature": "ai",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:37:08.783Z",
+      "feature": "ai",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:37:13.541Z",
+      "feature": "ai",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:37:19.580Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:37:29.076Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:37:40.144Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:49:37.352Z",
+      "feature": "auth",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:49:38.153Z",
+      "feature": "strategies",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:49:45.325Z",
+      "feature": "auth",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:49:45.551Z",
+      "feature": "ai",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:49:51.143Z",
+      "feature": "interfaces",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:49:51.857Z",
+      "feature": "dto",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:49:52.786Z",
+      "feature": "dto",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:49:59.477Z",
+      "feature": "auth",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:50:03.301Z",
+      "feature": "learning",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:50:05.840Z",
+      "feature": "users",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:50:07.063Z",
+      "feature": "points",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:50:15.050Z",
+      "feature": "ai",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:50:20.039Z",
+      "feature": "auth",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:50:24.480Z",
+      "feature": "share",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:50:28.445Z",
+      "feature": "share",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:53:27.210Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:53:30.999Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:53:34.342Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:53:40.507Z",
+      "feature": "ui",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:53:45.113Z",
+      "feature": "ui",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:54:03.018Z",
+      "feature": "ai",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:54:04.135Z",
+      "feature": "auth",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:54:05.275Z",
+      "feature": "learning",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:54:05.916Z",
+      "feature": "users",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T01:54:06.542Z",
+      "feature": "points",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T16:11:21.532Z",
+      "feature": "web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T16:11:34.958Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T16:11:42.815Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-21T16:11:55.703Z",
+      "feature": "dashboard",
       "phase": "do",
       "action": "updated"
     }
