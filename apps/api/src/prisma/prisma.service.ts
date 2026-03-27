@@ -19,7 +19,7 @@ export class PrismaService
 
   private async seedDictionaryIfEmpty() {
     const count = await this.dictionaryEntry.count();
-    if (count > 0) return;
+    if (count >= 50) return;
 
     await this.dictionaryEntry.createMany({
       skipDuplicates: true,
