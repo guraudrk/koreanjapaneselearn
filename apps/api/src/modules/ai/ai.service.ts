@@ -45,7 +45,8 @@ export class AiService {
         max_tokens: 512,
         messages: [{ role: 'user', content: prompt }],
       });
-    } catch {
+    } catch (e) {
+      console.error('[AI] Anthropic API error:', e);
       throw new HttpException(
         'AI translation service is temporarily unavailable. Please try again later.',
         HttpStatus.SERVICE_UNAVAILABLE,
