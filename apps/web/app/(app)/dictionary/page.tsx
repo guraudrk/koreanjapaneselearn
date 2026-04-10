@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { api } from "@/lib/api";
 import { useT } from "@/lib/i18n";
+import { useLocaleStore } from "@/store/locale";
 
 interface DictionaryEntry {
   id: string;
@@ -22,6 +23,7 @@ interface AiResult {
 
 export default function DictionaryPage() {
   const t = useT();
+  const { locale } = useLocaleStore();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<DictionaryEntry[]>([]);
   const [loading, setLoading] = useState(false);
@@ -44,23 +46,32 @@ export default function DictionaryPage() {
     }
   }
 
-  async function handleAiExplain(entryId: string, inputText: string, inputLang: string, output: string[]) {
-    setAiLoading((prev) => ({ ...prev, [entryId]: true }));
+  async function handleAiExplain(entry: DictionaryEntry) {
+    setAiLoading((prev) => ({ ...prev, [entry.id]: true }));
     try {
-      const { data } = await api.post("/ai/translate-explain", { inputText, inputLang, output });
-      setAiResult((prev) => ({ ...prev, [entryId]: data }));
+      const { data } = await api.post("/ai/translate-explain", {
+        inputText: entry.en,
+        inputLang: "en",
+        output: ["ko", "ja"],
+        cardKo: entry.ko,
+        cardJa: entry.ja,
+        cardKoReading: entry.koReading ?? undefined,
+        cardJaReading: entry.jaReading ?? undefined,
+        locale,
+      });
+      setAiResult((prev) => ({ ...prev, [entry.id]: data }));
     } catch (err: unknown) {
       const status = (err as { response?: { status?: number } })?.response?.status;
       setAiResult((prev) => ({
         ...prev,
-        [entryId]: {
+        [entry.id]: {
           translations: {},
           explanation: status === 429 ? t("common.ai_limit") : t("common.ai_error"),
           usage: { usedToday: 20, remainingToday: 0 },
         },
       }));
     } finally {
-      setAiLoading((prev) => ({ ...prev, [entryId]: false }));
+      setAiLoading((prev) => ({ ...prev, [entry.id]: false }));
     }
   }
 
@@ -224,7 +235,7 @@ export default function DictionaryPage() {
               {/* AI Explain */}
               <div style={{ marginTop: 14, paddingTop: 14, borderTop: "1px solid var(--glass-border)" }}>
                 <button
-                  onClick={() => handleAiExplain(entry.id, entry.en, "en", ["ko", "ja"])}
+                  onClick={() => handleAiExplain(entry)}
                   disabled={aiLoading[entry.id]}
                   style={{
                     padding: "7px 16px",

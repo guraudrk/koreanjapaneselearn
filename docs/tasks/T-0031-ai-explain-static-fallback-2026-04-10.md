@@ -103,4 +103,20 @@ UI 언어 설정이 한국어·일본어일 때도 설명이 영어로만 나오
 | `ko` | `"hello" → 한국어: 안녕하세요, 일본어: こんにちは. 이런 인사말은...` ✓ |
 | `ja` | `"hello" → 韓国語: 안녕하세요, 日本語: こんにちは. このような挨拶表現は...` ✓ |
 
+---
+
+## 추가 수정: 사전 페이지 다국어 설명 (2026-04-10)
+
+레슨 페이지와 동일한 문제가 사전 검색 페이지(`/dictionary`)에도 존재.
+AI 설명이 항상 영어로만 출력되는 문제 수정.
+
+### `apps/web/app/(app)/dictionary/page.tsx`
+
+- `import { useLocaleStore } from "@/store/locale"` 추가
+- `const { locale } = useLocaleStore()` 추가
+- `handleAiExplain(entryId, inputText, inputLang, output)` → `handleAiExplain(entry: DictionaryEntry)` 로 시그니처 변경
+- API 요청에 `locale`, `cardKo`, `cardJa`, `cardKoReading`, `cardJaReading` 포함
+- 버튼 `onClick`: `handleAiExplain(entry.id, ...)` → `handleAiExplain(entry)`
+- **커밋**: `(다음 커밋)`
+
 ## Status: DONE ✓
