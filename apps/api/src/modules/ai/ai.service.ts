@@ -46,9 +46,10 @@ export class AiService {
         messages: [{ role: 'user', content: prompt }],
       });
     } catch (e) {
-      console.error('[AI] Anthropic API error:', e);
+      const errMsg = e instanceof Error ? e.message : String(e);
+      console.error('[AI] Anthropic API error:', errMsg);
       throw new HttpException(
-        'AI translation service is temporarily unavailable. Please try again later.',
+        { message: 'AI service unavailable', debug: errMsg },
         HttpStatus.SERVICE_UNAVAILABLE,
       );
     }
