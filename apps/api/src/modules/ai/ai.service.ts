@@ -1,124 +1,95 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import Anthropic from '@anthropic-ai/sdk';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { TranslateDto } from './dto/translate.dto';
 
-const TIP_TOPICS = [
-  'a shared Hanja/Kanji vocabulary word (show both Korean Hangul + Japanese Kana pronunciations and meaning)',
-  'a false friend between Korean and Japanese — a word that looks or sounds similar but has different meanings',
-  'a shared grammatical pattern or sentence structure that learners of both languages can exploit',
-  'an interesting etymology connecting Korean and Japanese through Classical Chinese characters',
-  'a cultural nuance encoded in language that both Korean and Japanese share (e.g. honorifics, counting words)',
-  'a surprisingly similar Korean and Japanese word pair that comes from the same Chinese root',
-  'a phonological similarity or sound-change pattern that links Korean and Japanese',
-];
-
-const DAILY_LIMIT = 20;
-
 @Injectable()
 export class AiService {
-  private client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
   constructor(private readonly prisma: PrismaService) {}
 
   async translateExplain(userId: string, dto: TranslateDto) {
-    const today = new Date().toISOString().slice(0, 10);
-
-    const usage = await this.prisma.aiUsage.upsert({
-      where: { userId_date: { userId, date: today } },
-      update: {},
-      create: { userId, date: today, count: 0 },
+    // Look up dictionary entry for rich explanation
+    const entry = await this.prisma.dictionaryEntry.findFirst({
+      where: { en: { equals: dto.inputText, mode: 'insensitive' } },
     });
 
-    if (usage.count >= DAILY_LIMIT) {
-      throw new HttpException(
-        `Daily AI usage limit reached (${DAILY_LIMIT}/${DAILY_LIMIT}). Try again tomorrow.`,
-        HttpStatus.TOO_MANY_REQUESTS,
-      );
+    const translations: Record<string, string> = {};
+    for (const lang of dto.output) {
+      if (lang === 'ko') translations['ko'] = entry?.ko ?? dto.cardKo ?? '';
+      if (lang === 'ja') translations['ja'] = entry?.ja ?? dto.cardJa ?? '';
     }
 
-    const prompt = this.buildPrompt(dto);
-    let message: Awaited<ReturnType<typeof this.client.messages.create>>;
-    try {
-      message = await this.client.messages.create({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 512,
-        messages: [{ role: 'user', content: prompt }],
-      });
-    } catch (e) {
-      const errMsg = e instanceof Error ? e.message : String(e);
-      console.error('[AI] Anthropic API error:', errMsg);
-      throw new HttpException(
-        { message: 'AI service unavailable', debug: errMsg },
-        HttpStatus.SERVICE_UNAVAILABLE,
-      );
-    }
+    const explanation = this.buildExplanation(entry, dto);
 
-    const raw = (message.content[0] as { type: string; text: string }).text;
-    let result: { translations: Record<string, string>; explanation: string };
-    try {
-      result = JSON.parse(raw) as { translations: Record<string, string>; explanation: string };
-    } catch {
-      throw new HttpException('AI response parsing failed. Please try again.', HttpStatus.SERVICE_UNAVAILABLE);
-    }
-
-    const updated = await this.prisma.aiUsage.update({
+    // Usage tracking (preserved for future AI reactivation)
+    const today = new Date().toISOString().slice(0, 10);
+    const updated = await this.prisma.aiUsage.upsert({
       where: { userId_date: { userId, date: today } },
-      data: { count: { increment: 1 } },
+      update: { count: { increment: 1 } },
+      create: { userId, date: today, count: 1 },
     });
 
     return {
       inputText: dto.inputText,
-      translations: result.translations,
-      explanation: result.explanation,
-      usage: {
-        usedToday: updated.count,
-        remainingToday: DAILY_LIMIT - updated.count,
-      },
+      translations,
+      explanation,
+      usage: { usedToday: updated.count, remainingToday: 999 },
     };
   }
 
   async generateTip(locale: string) {
-    const langName =
-      locale === 'ko' ? 'Korean (한국어)' :
-      locale === 'ja' ? 'Japanese (日本語)' :
-      'English';
-
-    const topic = TIP_TOPICS[Math.floor(Math.random() * TIP_TOPICS.length)];
-
-    const prompt = `You are a linguistics expert specializing in Korean and Japanese.
-Generate ONE interesting, surprising linguistic fact about: ${topic}.
-
-Rules:
-- 2-3 sentences max
-- Include actual Korean characters (한글) and Japanese characters (かな/漢字) with romanizations
-- Make it genuinely educational and memorable
-- Respond entirely in ${langName}
-- Plain text only — no JSON, no markdown, no bullet points`;
-
-    try {
-      const message = await this.client.messages.create({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 256,
-        temperature: 1,
-        messages: [{ role: 'user', content: prompt }],
-      });
-      const tip = (message.content[0] as { type: string; text: string }).text.trim();
-      return { tip };
-    } catch {
-      return { tip: null };
-    }
+    // Dashboard tip replaced by static tips (T-0028). Kept for API compatibility.
+    void locale;
+    return { tip: null };
   }
 
-  private buildPrompt(dto: TranslateDto): string {
-    return `Translate and explain the following text.
-Input (${dto.inputLang}): "${dto.inputText}"
-Output languages needed: ${dto.output.join(', ')}
+  private buildExplanation(
+    entry: { ko: string; ja: string; koReading: string | null; jaReading: string | null; tags: string[] } | null,
+    dto: TranslateDto,
+  ): string {
+    const en = dto.inputText;
+    const ko = entry?.ko ?? dto.cardKo;
+    const ja = entry?.ja ?? dto.cardJa;
+    const koReading = entry?.koReading ?? dto.cardKoReading;
+    const jaReading = entry?.jaReading ?? dto.cardJaReading;
+    const tags: string[] = entry?.tags ?? [];
 
-Respond ONLY with valid JSON in this exact format:
-{
-  "translations": { ${dto.output.map((l) => `"${l}": "..."`).join(', ')} },
-  "explanation": "Brief explanation in English: meaning, nuance, usage context, and any cultural notes. Max 2 sentences."
-}`;
+    if (!ko && !ja) {
+      return `"${en}" is a great word to compare across Korean and Japanese. Both languages often share vocabulary through Sino-Korean (한자어/漢字語) roots — learning one helps reinforce the other.`;
+    }
+
+    // Core translation line
+    const parts: string[] = [];
+    if (koReading && jaReading) {
+      parts.push(`"${en}" → Korean: ${ko} (${koReading}), Japanese: ${ja} (${jaReading}).`);
+    } else if (koReading) {
+      parts.push(`"${en}" → Korean: ${ko} (${koReading}), Japanese: ${ja}.`);
+    } else if (jaReading) {
+      parts.push(`"${en}" → Korean: ${ko}, Japanese: ${ja} (${jaReading}).`);
+    } else {
+      parts.push(`"${en}" → Korean: ${ko}, Japanese: ${ja}.`);
+    }
+
+    // Cultural/linguistic note based on tags
+    const isHanja = tags.some(t => ['hanja', 'kanji', 'sino-korean', 'sino'].includes(t));
+    const isLoanword = tags.some(t => ['loanword', 'foreign', 'dutch', 'portuguese', 'french'].includes(t));
+    const isGreeting = tags.includes('greeting');
+    const isFood = tags.includes('food');
+    const isEmotion = tags.includes('emotion');
+
+    if (isHanja) {
+      parts.push(`This is a Sino-Korean/Kanji word — Korean ${ko} and Japanese ${ja} share the same Chinese character origin (한자어/漢字語), making it easier to learn both at once!`);
+    } else if (isLoanword) {
+      parts.push(`Both Korean and Japanese borrowed this word from the same foreign source, so the sounds are often strikingly similar across both languages.`);
+    } else if (isGreeting) {
+      parts.push(`Core greetings like this reflect the politeness systems (경어/敬語) both Korean and Japanese cultures deeply value.`);
+    } else if (isFood) {
+      parts.push(`Food vocabulary reveals fascinating cultural overlap — many Korean and Japanese culinary terms share the same Chinese character roots.`);
+    } else if (isEmotion) {
+      parts.push(`Emotion words are great for comparing how Korean and Japanese express feelings, often using the same Sino-Korean/Kanji base with different native nuances.`);
+    } else {
+      parts.push(`Comparing Korean ${ko} and Japanese ${ja} side-by-side reveals the deep linguistic ties between both languages — a powerful dual-learning shortcut!`);
+    }
+
+    return parts.join(' ');
   }
 }

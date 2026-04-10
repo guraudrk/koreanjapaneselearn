@@ -93,13 +93,17 @@ export default function LessonPage() {
     }, 900);
   }
 
-  async function handleAiExplain(inputText: string) {
+  async function handleAiExplain(card: Card) {
     setAiLoading(true);
     try {
       const { data } = await api.post("/ai/translate-explain", {
-        inputText,
+        inputText: card.en,
         inputLang: "en",
         output: ["ko", "ja"],
+        cardKo: card.ko,
+        cardJa: card.ja,
+        cardKoReading: card.koReading ?? undefined,
+        cardJaReading: card.jaReading ?? undefined,
       });
       setAiResult(data);
     } catch (err: unknown) {
@@ -366,7 +370,7 @@ export default function LessonPage() {
       {flipped && answerState === "idle" && card && (
         <div style={{ marginTop: 16 }}>
           <button
-            onClick={() => handleAiExplain(card.en)}
+            onClick={() => handleAiExplain(card)}
             disabled={aiLoading}
             style={{
               width: "100%",

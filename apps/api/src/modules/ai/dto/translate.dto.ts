@@ -1,4 +1,4 @@
-import { IsArray, IsIn, IsString, MinLength } from 'class-validator';
+import { IsArray, IsIn, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class TranslateDto {
   @IsString()
@@ -11,4 +11,10 @@ export class TranslateDto {
   @IsArray()
   @IsIn(['en', 'ko', 'ja'], { each: true })
   output: ('en' | 'ko' | 'ja')[];
+
+  // Card context — passed from frontend to build rich explanation without external API
+  @IsOptional() @IsString() cardKo?: string;
+  @IsOptional() @IsString() cardJa?: string;
+  @IsOptional() @IsString() cardKoReading?: string;
+  @IsOptional() @IsString() cardJaReading?: string;
 }
