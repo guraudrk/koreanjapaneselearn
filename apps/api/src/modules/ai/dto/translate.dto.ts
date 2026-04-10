@@ -17,4 +17,9 @@ export class TranslateDto {
   @IsOptional() @IsString() cardJa?: string;
   @IsOptional() @IsString() cardKoReading?: string;
   @IsOptional() @IsString() cardJaReading?: string;
+
+  // UI locale — explanation is generated in this language
+  @IsOptional()
+  @IsIn(['en', 'ko', 'ja'])
+  locale?: 'en' | 'ko' | 'ja';
 }

@@ -6,6 +6,7 @@ import { api } from "@/lib/api";
 import { FlipCard } from "@/components/ui/FlipCard";
 import { useAuthStore } from "@/store/auth";
 import { useT } from "@/lib/i18n";
+import { useLocaleStore } from "@/store/locale";
 
 interface Card {
   id: string;
@@ -35,6 +36,7 @@ export default function LessonPage() {
   const { curriculumId, lessonId } = useParams<{ curriculumId: string; lessonId: string }>();
   const { user } = useAuthStore();
   const t = useT();
+  const { locale } = useLocaleStore();
   const mode = (user?.settings?.learningMode ?? "BOTH") as "KR" | "JP" | "BOTH";
 
   const [lesson, setLesson] = useState<LessonDetail | null>(null);
@@ -104,6 +106,7 @@ export default function LessonPage() {
         cardJa: card.ja,
         cardKoReading: card.koReading ?? undefined,
         cardJaReading: card.jaReading ?? undefined,
+        locale,
       });
       setAiResult(data);
     } catch (err: unknown) {
