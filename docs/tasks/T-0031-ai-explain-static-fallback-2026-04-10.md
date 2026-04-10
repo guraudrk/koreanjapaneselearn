@@ -84,4 +84,23 @@ handleAiExplain(card)  // 카드 전체 데이터 전송
 | 일일 한도 | 제거 (`remainingToday: 999`) ✓ |
 | Anthropic 크레딧 의존 | 없음 ✓ |
 
+---
+
+## 추가 수정: 다국어 설명 출력 (2026-04-10)
+
+UI 언어 설정이 한국어·일본어일 때도 설명이 영어로만 나오는 문제 수정.
+
+- `TranslateDto`에 `locale?: 'en' | 'ko' | 'ja'` 추가
+- `buildExplanation` → `buildEn / buildKo / buildJa` 3개 메서드로 분기
+- 프론트엔드: `useLocaleStore().locale`을 API 요청에 포함
+- **커밋**: `8e0a881`
+
+### 검증 결과
+
+| locale | 설명 언어 |
+|--------|----------|
+| `en` | `"hello" → Korean: 안녕하세요, Japanese: こんにちは. Core greetings...` ✓ |
+| `ko` | `"hello" → 한국어: 안녕하세요, 일본어: こんにちは. 이런 인사말은...` ✓ |
+| `ja` | `"hello" → 韓国語: 안녕하세요, 日本語: こんにちは. このような挨拶表現は...` ✓ |
+
 ## Status: DONE ✓
